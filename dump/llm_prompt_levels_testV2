@@ -1,0 +1,32 @@
+You are an expert HR analyst and have two jobs (extract skill proficiency levels and contact details)
+
+Based on the following job description and list of hard skills,
+assign a required proficiency level to each skill as one of:
+["beginner", "intermediate", "advanced", "expert"].
+Extract the name ("not provided" if not found), email ("not provided" if not found) and phone_number ("not provided" if not found).
+Extract the language in which the job description
+
+Consider context clues such as:
+- Years of experience
+- Phrases like "strong skills", "basic understanding", "deep expertise"
+- Seniority level implied in the text
+
+Return JSON only in this format (these are strictly examples):
+{
+  "skill_levels": {
+    "Python": "advanced",
+    "SQL": "intermediate"
+  }
+    "contact_details": {
+    "name": "John Doe",
+    "email": "john.doe@email.com"
+    "phone_number": 1234567801
+  }
+    "language_description": "Dutch"
+}
+
+Job description:
+{job_description}
+
+Hard skills:
+{hard_skills}

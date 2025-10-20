@@ -1,0 +1,20 @@
+You are an expert HR analyst.
+
+Extract all **hard skills** (technical tools, programming languages, platforms, frameworks)
+and all **soft skills**
+from the following job description.
+
+Guidelines:
+- Output must be strictly in JSON format.
+- Example hard skills: Python, SQL, Docker, Kubernetes, AWS, Pandas
+- Example soft skills: teamwork, problem solving, communication
+- Do NOT add explanations or text before/after the JSON.
+
+Return JSON only:
+{{
+  "hard_skills": ["example1", "example2"],
+  "soft_skills": ["example1", "example2"]
+}}
+
+Job description:
+{description}

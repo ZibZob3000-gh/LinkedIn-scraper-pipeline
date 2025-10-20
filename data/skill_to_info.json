@@ -1,0 +1,482 @@
+{
+  "Data Strategy & Roadmap Development": {
+    "ID": "1",
+    "group": "Management, Governance & Strategy",
+    "subgroup": null
+  },
+  "Tool selection": {
+    "ID": "10",
+    "group": "Management, Governance & Strategy",
+    "subgroup": null
+  },
+  "Project Management": {
+    "ID": "20",
+    "group": "Management, Governance & Strategy",
+    "subgroup": null
+  },
+  "Interim & Team (People) Management": {
+    "ID": "30",
+    "group": "Management, Governance & Strategy",
+    "subgroup": null
+  },
+  "Data Governance": {
+    "ID": "40",
+    "group": "Management, Governance & Strategy",
+    "subgroup": null
+  },
+  "Business Requirements Gathering": {
+    "ID": "101",
+    "group": "General Skills",
+    "subgroup": null
+  },
+  "Functional Analysis": {
+    "ID": "111",
+    "group": "General Skills",
+    "subgroup": null
+  },
+  "End-user Training": {
+    "ID": "121",
+    "group": "General Skills",
+    "subgroup": null
+  },
+  "Technical Solution Design (Data Architecture)": {
+    "ID": "131",
+    "group": "General Skills",
+    "subgroup": null
+  },
+  "Predictive / Advanced Analytics": {
+    "ID": "141",
+    "group": "General Skills",
+    "subgroup": null
+  },
+  "Machine Learning": {
+    "ID": "151",
+    "group": "General Skills",
+    "subgroup": null
+  },
+  "Artificial Intelligence": {
+    "ID": "161",
+    "group": "General Skills",
+    "subgroup": null
+  },
+  "ESG Data Collection & Reporting": {
+    "ID": "171",
+    "group": "General Skills",
+    "subgroup": null
+  },
+  "MS SQL Server": {
+    "ID": "1101",
+    "group": "Tech Skills",
+    "subgroup": "Datamanagement & Datastorage"
+  },
+  "Azure SQL Server": {
+    "ID": "1111",
+    "group": "Tech Skills",
+    "subgroup": "Datamanagement & Datastorage"
+  },
+  "Oracle": {
+    "ID": "1121",
+    "group": "Tech Skills",
+    "subgroup": "Datamanagement & Datastorage"
+  },
+  "Informatica": {
+    "ID": "1131",
+    "group": "Tech Skills",
+    "subgroup": "Datamanagement & Datastorage"
+  },
+  "PostgreSQL": {
+    "ID": "1141",
+    "group": "Tech Skills",
+    "subgroup": "Datamanagement & Datastorage"
+  },
+  "MySQL": {
+    "ID": "1151",
+    "group": "Tech Skills",
+    "subgroup": "Datamanagement & Datastorage"
+  },
+  "ElasticSearch": {
+    "ID": "1161",
+    "group": "Tech Skills",
+    "subgroup": "Datamanagement & Datastorage"
+  },
+  "Teradata": {
+    "ID": "1171",
+    "group": "Tech Skills",
+    "subgroup": "Datamanagement & Datastorage"
+  },
+  "Azure Blob Storage": {
+    "ID": "1181",
+    "group": "Tech Skills",
+    "subgroup": "Datamanagement & Datastorage"
+  },
+  "Spark": {
+    "ID": "1191",
+    "group": "Tech Skills",
+    "subgroup": "Datamanagement & Datastorage"
+  },
+  "IBM DataStage": {
+    "ID": "1201",
+    "group": "Tech Skills",
+    "subgroup": "Datamanagement & Datastorage"
+  },
+  "Azure Data Factory": {
+    "ID": "1211",
+    "group": "Tech Skills",
+    "subgroup": "Datamanagement & Datastorage"
+  },
+  "Talend": {
+    "ID": "1221",
+    "group": "Tech Skills",
+    "subgroup": "Datamanagement & Datastorage"
+  },
+  "Databricks": {
+    "ID": "1231",
+    "group": "Tech Skills",
+    "subgroup": "Datamanagement & Datastorage"
+  },
+  "MongoDB": {
+    "ID": "1241",
+    "group": "Tech Skills",
+    "subgroup": "Datamanagement & Datastorage"
+  },
+  "Amazon S3": {
+    "ID": "1251",
+    "group": "Tech Skills",
+    "subgroup": "Datamanagement & Datastorage"
+  },
+  "Amazon Glue": {
+    "ID": "1261",
+    "group": "Tech Skills",
+    "subgroup": "Datamanagement & Datastorage"
+  },
+  "Amazon Athena": {
+    "ID": "1271",
+    "group": "Tech Skills",
+    "subgroup": "Datamanagement & Datastorage"
+  },
+  "DBT": {
+    "ID": "1281",
+    "group": "Tech Skills",
+    "subgroup": "Datamanagement & Datastorage"
+  },
+  "DataVault": {
+    "ID": "1291",
+    "group": "Tech Skills",
+    "subgroup": "Datamanagement & Datastorage"
+  },
+  "Kimball": {
+    "ID": "1301",
+    "group": "Tech Skills",
+    "subgroup": "Datamanagement & Datastorage"
+  },
+  "Snowflake": {
+    "ID": "1311",
+    "group": "Tech Skills",
+    "subgroup": "Datamanagement & Datastorage"
+  },
+  "Delta Lake": {
+    "ID": "1321",
+    "group": "Tech Skills",
+    "subgroup": "Datamanagement & Datastorage"
+  },
+  "Redis": {
+    "ID": "1331",
+    "group": "Tech Skills",
+    "subgroup": "Datamanagement & Datastorage"
+  },
+  "MS PowerBI": {
+    "ID": "2101",
+    "group": "Tech Skills",
+    "subgroup": "User Tools"
+  },
+  "MS PowerApps": {
+    "ID": "2111",
+    "group": "Tech Skills",
+    "subgroup": "User Tools"
+  },
+  "IBM Cognos": {
+    "ID": "2121",
+    "group": "Tech Skills",
+    "subgroup": "User Tools"
+  },
+  "Tableau": {
+    "ID": "2131",
+    "group": "Tech Skills",
+    "subgroup": "User Tools"
+  },
+  "Qlik": {
+    "ID": "2141",
+    "group": "Tech Skills",
+    "subgroup": "User Tools"
+  },
+  "IBM Planning Analytics": {
+    "ID": "2151",
+    "group": "Tech Skills",
+    "subgroup": "User Tools"
+  },
+  "Board": {
+    "ID": "2161",
+    "group": "Tech Skills",
+    "subgroup": "User Tools"
+  },
+  "Anaplan": {
+    "ID": "2171",
+    "group": "Tech Skills",
+    "subgroup": "User Tools"
+  },
+  "Pigment": {
+    "ID": "2181",
+    "group": "Tech Skills",
+    "subgroup": "User Tools"
+  },
+  "Onestream": {
+    "ID": "2191",
+    "group": "Tech Skills",
+    "subgroup": "User Tools"
+  },
+  "Jedox": {
+    "ID": "2201",
+    "group": "Tech Skills",
+    "subgroup": "User Tools"
+  },
+  "Workday": {
+    "ID": "2211",
+    "group": "Tech Skills",
+    "subgroup": "User Tools"
+  },
+  "Azure OpenAI": {
+    "ID": "2221",
+    "group": "Tech Skills",
+    "subgroup": "User Tools"
+  },
+  "MS Purview": {
+    "ID": "2231",
+    "group": "Tech Skills",
+    "subgroup": "User Tools"
+  },
+  "IBM Databand": {
+    "ID": "2241",
+    "group": "Tech Skills",
+    "subgroup": "User Tools"
+  },
+  "Collibra": {
+    "ID": "2251",
+    "group": "Tech Skills",
+    "subgroup": "User Tools"
+  },
+  "Dscribe": {
+    "ID": "2261",
+    "group": "Tech Skills",
+    "subgroup": "User Tools"
+  },
+  "Git": {
+    "ID": "2271",
+    "group": "Tech Skills",
+    "subgroup": "User Tools"
+  },
+  "Azure Machine Learning": {
+    "ID": "3111",
+    "group": "Tech Skills",
+    "subgroup": "Platforms & Infra"
+  },
+  "Grafana": {
+    "ID": "3121",
+    "group": "Tech Skills",
+    "subgroup": "Platforms & Infra"
+  },
+  "Azure Fabric": {
+    "ID": "3131",
+    "group": "Tech Skills",
+    "subgroup": "Platforms & Infra"
+  },
+  "Kubernetes": {
+    "ID": "3141",
+    "group": "Tech Skills",
+    "subgroup": "Platforms & Infra"
+  },
+  "Docker": {
+    "ID": "3151",
+    "group": "Tech Skills",
+    "subgroup": "Platforms & Infra"
+  },
+  "Azure Kubernetes Service": {
+    "ID": "3161",
+    "group": "Tech Skills",
+    "subgroup": "Platforms & Infra"
+  },
+  "Amazon Sagemaker": {
+    "ID": "3171",
+    "group": "Tech Skills",
+    "subgroup": "Platforms & Infra"
+  },
+  "Azure Functions": {
+    "ID": "3181",
+    "group": "Tech Skills",
+    "subgroup": "Platforms & Infra"
+  },
+  "Airflow": {
+    "ID": "3191",
+    "group": "Tech Skills",
+    "subgroup": "Platforms & Infra"
+  },
+  "Dagster": {
+    "ID": "3201",
+    "group": "Tech Skills",
+    "subgroup": "Platforms & Infra"
+  },
+  "Prefect": {
+    "ID": "3211",
+    "group": "Tech Skills",
+    "subgroup": "Platforms & Infra"
+  },
+  "Azure": {
+    "ID": "3221",
+    "group": "Tech Skills",
+    "subgroup": "Platforms & Infra"
+  },
+  "Google Cloud": {
+    "ID": "3231",
+    "group": "Tech Skills",
+    "subgroup": "Platforms & Infra"
+  },
+  "AWS": {
+    "ID": "3241",
+    "group": "Tech Skills",
+    "subgroup": "Platforms & Infra"
+  },
+  "Digital Ocean": {
+    "ID": "3251",
+    "group": "Tech Skills",
+    "subgroup": "Platforms & Infra"
+  },
+  "SQL": {
+    "ID": "4101",
+    "group": "Tech Skills",
+    "subgroup": "Languages & Frameworks"
+  },
+  "Python": {
+    "ID": "4111",
+    "group": "Tech Skills",
+    "subgroup": "Languages & Frameworks"
+  },
+  "Julia": {
+    "ID": "4121",
+    "group": "Tech Skills",
+    "subgroup": "Languages & Frameworks"
+  },
+  "JavaScript": {
+    "ID": "4131",
+    "group": "Tech Skills",
+    "subgroup": "Languages & Frameworks"
+  },
+  "NodeJS": {
+    "ID": "4141",
+    "group": "Tech Skills",
+    "subgroup": "Languages & Frameworks"
+  },
+  "PySpark": {
+    "ID": "4151",
+    "group": "Tech Skills",
+    "subgroup": "Languages & Frameworks"
+  },
+  "VBScript": {
+    "ID": "4161",
+    "group": "Tech Skills",
+    "subgroup": "Languages & Frameworks"
+  },
+  "R": {
+    "ID": "4171",
+    "group": "Tech Skills",
+    "subgroup": "Languages & Frameworks"
+  },
+  "Scala": {
+    "ID": "4181",
+    "group": "Tech Skills",
+    "subgroup": "Languages & Frameworks"
+  },
+  "GraphQL": {
+    "ID": "4191",
+    "group": "Tech Skills",
+    "subgroup": "Languages & Frameworks"
+  },
+  "OpenAPI": {
+    "ID": "4201",
+    "group": "Tech Skills",
+    "subgroup": "Languages & Frameworks"
+  },
+  "FastAPI": {
+    "ID": "4211",
+    "group": "Tech Skills",
+    "subgroup": "Languages & Frameworks"
+  },
+  "Keras": {
+    "ID": "4221",
+    "group": "Tech Skills",
+    "subgroup": "Languages & Frameworks"
+  },
+  "MLFlow": {
+    "ID": "4231",
+    "group": "Tech Skills",
+    "subgroup": "Languages & Frameworks"
+  },
+  "sklearn": {
+    "ID": "4241",
+    "group": "Tech Skills",
+    "subgroup": "Languages & Frameworks"
+  },
+  "Tensorflow": {
+    "ID": "4251",
+    "group": "Tech Skills",
+    "subgroup": "Languages & Frameworks"
+  },
+  "Pytorch": {
+    "ID": "4261",
+    "group": "Tech Skills",
+    "subgroup": "Languages & Frameworks"
+  },
+  "Go": {
+    "ID": "4271",
+    "group": "Tech Skills",
+    "subgroup": "Languages & Frameworks"
+  },
+  "ML Ops": {
+    "ID": "4281",
+    "group": "Tech Skills",
+    "subgroup": "Languages & Frameworks"
+  },
+  "Poetry": {
+    "ID": "4291",
+    "group": "Tech Skills",
+    "subgroup": "Languages & Frameworks"
+  },
+  "Jenkins": {
+    "ID": "4301",
+    "group": "Tech Skills",
+    "subgroup": "Languages & Frameworks"
+  },
+  "CI/CD": {
+    "ID": "4311",
+    "group": "Tech Skills",
+    "subgroup": "Languages & Frameworks"
+  },
+  "Kafka": {
+    "ID": "4321",
+    "group": "Tech Skills",
+    "subgroup": "Languages & Frameworks"
+  },
+  "Prophet": {
+    "ID": "4331",
+    "group": "Tech Skills",
+    "subgroup": "Languages & Frameworks"
+  },
+  "Bicep": {
+    "ID": "4341",
+    "group": "Tech Skills",
+    "subgroup": "Languages & Frameworks"
+  },
+  "Terraform": {
+    "ID": "4351",
+    "group": "Tech Skills",
+    "subgroup": "Languages & Frameworks"
+  }
+}

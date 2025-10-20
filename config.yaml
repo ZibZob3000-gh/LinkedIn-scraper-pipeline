@@ -1,0 +1,43 @@
+postgres:
+  host: "10.0.1.111"
+  dbname: "exposed_data"
+  user: "job_rw_user"
+  password: "qojxy8-cyqxyb-Qebjuw"
+  port: 5433
+
+paths:
+  extractors: "extractor"
+  ingestor: "ingestor"
+  insertor: "insertor"
+  dump: "dump"
+  data: "data/"
+  builders: "builders"
+  test: "test"
+  prompts: "prompts"
+
+llm:
+  model_name: "mistral:instruct"
+  max_retries: 2
+
+prompts:
+  prompt_1: "llm_prompt_extract_v4"
+  prompt_2: "llm_prompt_levels_v4"
+  single_prompt: "llm_prompt_v1"
+
+skills:
+  taxonomy_file: "skill_to_info.json"
+  synonyms_file: "skill_synonyms.json"
+  fuzzy_threshold: 85
+
+files:
+  descriptions: "Descriptions.json"
+  industry_mapping: "industry_mappings.json"
+
+extractors:
+  skills_extractor: "extract_skills_v3.py"
+  industry_extractor: "industry_categorisation.py"
+
+processing:
+  max_jobs: 2
+  date_filter: "2025-10-17"  # if null, defaults to today
+

@@ -1,0 +1,21 @@
+You are an expert technical recruiter. Extract structured information from the job description below.
+
+Return **exactly** this JSON:
+
+{
+  "hard_skills": ["..."],
+  "soft_skills": ["..."],
+  "department": "..."
+}
+
+Rules:
+1. Hard skills: programming languages, frameworks, libraries, tools, platforms, orchestration, cloud services, APIs, databases, technical competencies.
+2. Soft skills: teamwork, communication, leadership, adaptability, problem-solving, spoken languages.
+3. For multiple skills separated by "/", "or", "and", or in parentheses, extract each separately. No "(optional)" or extra tags.
+4. Department must be one of:
+["Engineering","Information Technology","Human Resources","Finance","Marketing","Sales","Legal","Operations","Customer Support","Product Management","Research & Development","Data & Analytics","Supply Chain","Administration","Quality Assurance"]
+   - Always choose **exactly one**, even if unsure.
+   - Map team names to closest standard department (e.g., "AI Platform Team" → "Engineering").
+
+Job description:
+{job_description}
