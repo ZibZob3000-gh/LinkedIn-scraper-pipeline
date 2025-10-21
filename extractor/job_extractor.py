@@ -6,13 +6,21 @@ class JobExtractor:
         self.prompts = prompts
 
         # ---- Skill taxonomy & synonyms ----
-        self.skill_to_info = skills_data["taxonomy"]
-        self.skill_synonyms = skills_data["synonyms"]
+        self.skill_to_info = {
+            base_skill.lower(): info
+            for base_skill, info in skills_data["taxonomy"].items()
+        }
+
+        self.skill_synonyms = {
+            base_skill.lower(): [syn.lower() for syn in synonyms]
+            for base_skill, synonyms in skills_data["synonyms"].items()
+        }
+
         self.fuzzy_threshold = skills_data.get("fuzzy_threshold", 85)
 
         # Flatten synonym dict for exact matching: synonym -> base skill
         self.synonym_to_skill = {
-            syn.lower(): base_skill
+            syn: base_skill
             for base_skill, synonyms in self.skill_synonyms.items()
             for syn in synonyms
         }
@@ -23,34 +31,23 @@ class JobExtractor:
         # Map wrapper
         def map_skill_wrapper(extracted_skill: str):
             return self.skills_module.map_skill_with_synonyms_verbose(
-                extracted_skill,
+                extracted_skill=extracted_skill,
                 synonym_to_skill=self.synonym_to_skill,
                 skill_lookup=self.skill_to_info,
                 all_synonyms=self.all_synonyms,
                 fuzzy_threshold=self.fuzzy_threshold
             )
+
         self.map_skill_with_synonyms_verbose = map_skill_wrapper
 
         # Columns to preserve from original record
         self.original_columns = [
-            "id",
-            "title",
-            "job_function",
-            "job_level",
-            "job_type",
-            "is_remote",
-            "location",
-            "date_posted",
-            "job_url",
-            "site",
-            "company",
-            "company_url",
-            "company_industry",
-            "description",
+            "id", "title", "job_function", "job_level", "job_type",
+            "is_remote", "location", "date_posted", "job_url", "site",
+            "company", "company_url", "company_industry", "description"
         ]
 
     def process_job(self, job_record):
-        job_id = job_record["id"]
         raw_desc = job_record.get("description", "")
         description = self.skills_module.clean_job_description(raw_desc)
 
@@ -83,7 +80,7 @@ class JobExtractor:
             if mapped["ID"]:
                 skill_levels_with_ids[str(mapped["ID"])] = level
             else:
-                skill_levels_with_ids[skill_name] = level
+                skill_levels_with_ids[skill_name] = level  # fallback to skill name
 
         # ---- Step 4: Industry mapping ----
         company_industry = job_record.get("company_industry", "")

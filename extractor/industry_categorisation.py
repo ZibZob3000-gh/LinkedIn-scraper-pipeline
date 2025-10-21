@@ -49,28 +49,59 @@ def call_local_llm(prompt: str, llm_config: dict) -> str:
 
 
 # ==== MAP INDUSTRY ====
+def safe_json_parse_industry(text: str) -> dict:
+    match = re.search(r'{.*}', text, re.DOTALL)
+    if not match:
+        return {"main_industry": "unknown", "subindustry": "unknown"}
+
+    json_str = match.group().strip()
+    if not json_str.endswith("}"):
+        json_str += "}"
+
+    try:
+        return json.loads(json_str)
+    except json.JSONDecodeError:
+        repaired = re.sub(r',(\s*[}\]])', r'\1', json_str)
+        try:
+            return json.loads(repaired)
+        except Exception:
+            return {"main_industry": "unknown", "subindustry": "unknown"}
+
+
 def map_industry(company_industry_str: str, llm_config: dict) -> dict:
-    """Map a company industry string to main and subindustry using the LLM."""
+    if not company_industry_str.strip():
+        print("⚠️ No industry string provided.")
+        return {"main_industry": "unknown", "subindustry": "unknown"}
+
+    # Local keyword fallback
+    for main, subs in industry_mapping.items():
+        if main.lower() in company_industry_str.lower():
+            return {"main_industry": main, "subindustry": "unknown"}
+        for sub in subs:
+            if sub.lower() in company_industry_str.lower():
+                return {"main_industry": main, "subindustry": sub}
+
     prompt = f"""
-You are given the following main industries and their subindustries:
+You are an expert business analyst.
+
+Return valid JSON in this exact format only:
+{{
+  "main_industry": "<main_industry>",
+  "subindustry": "<subindustry>"
+}}
+
+Main industries and subindustries:
 {json.dumps(industry_mapping, indent=2)}
 
-A company has the industry string: "{company_industry_str}"
+Company industry string: "{company_industry_str}"
 
-Return the best matching main industry and subindustry as JSON only, e.g.:
-{{"main_industry": "<main_industry>", "subindustry": "<subindustry>"}}
-If you cannot match, return null for both fields.
+Rules:
+1. Match to the best fitting main_industry and subindustry.
+2. If you cannot match, use "unknown" for both.
+3. Respond with JSON only — no text, no explanations.
 """
     output_text = call_local_llm(prompt, llm_config)
-    try:
-        match = re.search(r'{.*}', output_text, re.DOTALL)
-        if match:
-            json_str = match.group()
-            try:
-                return json.loads(json_str)
-            except json.JSONDecodeError:
-                return ast.literal_eval(json_str)
-    except Exception:
-        pass
+    print(f"🔍 LLM raw output for industry mapping:\n{output_text}\n")
 
-    return {"main_industry": None, "subindustry": None}
+    return safe_json_parse_industry(output_text)
+

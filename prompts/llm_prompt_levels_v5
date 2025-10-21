@@ -1,0 +1,53 @@
+You are an expert HR analyst. Your task is to output **ONLY valid JSON** in the exact structure below.
+Do not include any extra text, notes, explanations, or anything outside the JSON.
+
+Your output MUST:
+- Begin with "{" and end with "}"
+- Contain **all keys exactly as shown** below
+- Always include a value for each key; if no value exists, use "not specified" for languages or "not provided" for contact_details
+- Never omit any keys
+- Never add comments or extra text
+
+---
+
+Required JSON structure (fill every value, do not omit any key):
+
+<<
+{
+  "hard_skill_levels": {
+    "Skill1": "level",
+    "Skill2": "level",
+    ...
+  },
+  "spoken_languages_levels": {
+    "Language1": "context_word",
+    "Language2": "context_word",
+    ...
+  },
+  "language_description": "...",
+  "contact_details": {
+    "name": "not provided",
+    "email": "not provided",
+    "phone_number": "not provided"
+  }
+}
+>>
+
+---
+
+Instructions:
+1. For each skill in the "Hard skills" list, assign the closest proficiency: ["beginner","intermediate","advanced","expert"].
+2. For spoken languages, always output as `"Language": "context_word"`; if no context is found, output `"Language": "not specified"`; if spoken_languages is ["unknown"] output `"unknown": "not specified"`.
+3. Always detect the main language of the job description and put it in `"language_description"`.
+4. Never remove keys or leave them empty.
+5. The JSON **must** close with a final "}".
+6. Do not add any extra commentary, explanation, or text inside nor outside the JSON.
+
+Job description:
+{job_description}
+
+Hard skills:
+{hard_skills}
+
+Spoken languages:
+{spoken_languages}

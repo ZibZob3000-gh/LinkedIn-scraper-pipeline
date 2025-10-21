@@ -4,122 +4,195 @@
     "Software Development",
     "Data Analytics",
     "Cloud",
-    "Cybersecurity"
+    "Cloud Computing",
+    "Cybersecurity",
+    "Artificial Intelligence",
+    "Machine Learning",
+    "IT Consulting",
+    "Software Engineering"
   ],
   "Financial Services": [
     "Banking",
     "Investment",
     "Insurance",
-    "Accounting"
+    "Accounting",
+    "Fintech",
+    "Wealth Management",
+    "Financial Consulting"
   ],
   "Manufacturing": [
     "Machinery",
-    "Industrial",
+    "Industrial Equipment",
     "Automotive",
     "Metal",
-    "Plastics"
+    "Plastics",
+    "Electronics",
+    "Food Manufacturing",
+    "Beverage Manufacturing",
+    "Chemical Manufacturing",
+    "Pharmaceutical Manufacturing",
+    "Textile Manufacturing",
+    "Aerospace Manufacturing"
   ],
   "Life Sciences": [
     "Pharmaceuticals",
     "Biotechnology",
     "Healthcare",
     "Hospitals",
-    "Medical Devices"
+    "Medical Devices",
+    "Clinical Research",
+    "Pharma Manufacturing"
   ],
   "Energy & Utilities": [
     "Oil",
     "Gas",
     "Renewable Energy",
-    "Power Generation"
+    "Power Generation",
+    "Electricity",
+    "Nuclear Energy",
+    "Solar Energy",
+    "Wind Energy",
+    "Utilities"
   ],
   "Construction & Real Estate": [
     "Construction",
     "Architecture",
     "Civil Engineering",
-    "Real Estate"
+    "Structural Engineering",
+    "Real Estate",
+    "Property Development",
+    "Building Materials",
+    "Infrastructure"
   ],
   "Food & Beverage": [
     "Food Production",
+    "Food Manufacturing",
+    "Beverage Manufacturing",
     "Restaurants",
-    "Beverage Manufacturing"
+    "Food Processing",
+    "Catering",
+    "Hospitality",
+    "Agrifood"
   ],
   "Retail & Consumer Goods": [
     "Retail",
+    "E-commerce",
     "Apparel",
     "Fashion",
-    "Luxury Goods"
+    "Luxury Goods",
+    "Consumer Electronics",
+    "Supermarkets"
   ],
   "Transportation & Logistics": [
     "Shipping",
     "Warehousing",
     "Supply Chain",
     "Aviation",
-    "Automotive"
+    "Automotive Logistics",
+    "Public Transport",
+    "Freight",
+    "Railway"
   ],
   "Marketing & Advertising": [
     "Advertising",
     "Media",
     "Market Research",
-    "Communications"
+    "Communications",
+    "Digital Marketing",
+    "Public Relations",
+    "Brand Management"
   ],
   "Education & Training": [
     "Schools",
     "Universities",
     "E-learning",
-    "Research"
+    "Research",
+    "EdTech",
+    "Vocational Training",
+    "Academic Research"
   ],
   "Government & Public Services": [
     "Government Administration",
     "Public Policy",
-    "Nonprofit"
+    "Nonprofit",
+    "Public Health",
+    "Municipal Services",
+    "Regulatory Affairs"
   ],
   "Legal & Consulting Services": [
     "Law",
     "Legal Services",
-    "Business Consulting"
+    "Business Consulting",
+    "Tax Advisory",
+    "Corporate Law",
+    "Management Consulting"
   ],
   "Agriculture & Natural Resources": [
     "Farming",
     "Mining",
     "Forestry",
-    "Agriculture"
+    "Agriculture",
+    "Agro-industry",
+    "Fishing",
+    "Food Supply Chain"
   ],
   "Telecommunications": [
     "Telecom",
     "Internet Services",
-    "Network Providers"
+    "Network Providers",
+    "Mobile Operators",
+    "5G Infrastructure",
+    "Data Centers"
   ],
   "Entertainment & Arts": [
     "Music",
     "Sports",
     "Media",
     "Film",
-    "Museums"
+    "Museums",
+    "Performing Arts",
+    "Gaming",
+    "Publishing"
   ],
   "Chemical & Materials": [
     "Chemical Manufacturing",
     "Raw Materials",
-    "Paints"
+    "Paints",
+    "Plastics",
+    "Petrochemicals",
+    "Coatings"
   ],
   "Professional & Business Services": [
     "Staffing",
     "HR",
     "Outsourcing",
-    "Admin Support"
+    "Admin Support",
+    "Recruitment",
+    "Accounting Services",
+    "Payroll"
   ],
   "Environmental & Sustainability": [
     "Environmental Services",
-    "Renewable Energy"
+    "Renewable Energy",
+    "Sustainability Consulting",
+    "Waste Management",
+    "Recycling",
+    "Clean Tech"
   ],
   "Travel & Hospitality": [
     "Travel",
     "Tourism",
     "Hotels",
-    "Leisure"
+    "Leisure",
+    "Catering",
+    "Event Management",
+    "Airlines"
   ],
   "Defense & Aerospace": [
     "Aviation",
     "Defense Manufacturing",
-    "Space Research"
+    "Space Research",
+    "Military Technology",
+    "Aerospace Engineering"
   ]
 }

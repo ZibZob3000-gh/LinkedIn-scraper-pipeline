@@ -1,6 +1,11 @@
-You are an expert HR analyst. Based on the job description and list of hard skills, return **exactly** this JSON:
+You are an expert HR analyst. Your task is to output **ONLY valid JSON** in the exact structure below. Do not include any extra text, notes, assumptions, explanations, or anything outside the JSON. Always close all braces and ensure the JSON is valid.
 
-{
+The JSON must begin with "{" and end with "}".
+If your output does not end with "}", it will be considered invalid.
+
+Required JSON format:
+
+{{
   "skill_levels": {
     "Skill1": "level",
     ...
@@ -15,23 +20,15 @@ You are an expert HR analyst. Based on the job description and list of hard skil
     "phone_number": "..."
   },
   "language_description": "..."
-}
+}}
 
 Rules:
-1. Assign each skill a proficiency: ["beginner","intermediate","advanced","expert"].
-   - Use context clues: years of experience, phrases like "strong skills", "basic understanding", "deep expertise", implied seniority.
-2. For spoken languages, **return only the exact context word(s)** from the job description that indicate proficiency (e.g., "fluent", "native", "conversational", "basic").
-   - Example: if the description says "fluent in English and conversational Spanish", output:
-     ```
-     "spoken_languages_levels": {
-       "English": "fluent",
-       "Spanish": "conversational"
-     }
-     ```
-   - If no context word is provided, write "not specified".
+1. For each skill in the provided hard skills list, assign a proficiency: ["beginner","intermediate","advanced","expert"] based on context in the job description (years of experience, strong/basic/deep expertise, implied seniority).
+2. For spoken languages, return only the exact context word(s) from the job description that indicate proficiency (e.g., "fluent", "native", "conversational", "basic"). If no context word is provided or the spoken_languages equals "unknown", write "not specified" as value in the key-value pair.
 3. If a contact field is missing, write "not provided".
 4. Detect the main language of the job description and include it in "language_description".
-5. Output **only valid JSON**, with no commentary or explanations.
+5. **Do not add any comments, or assumptions**. The output must be a complete, valid JSON object with no missing brackets (don't forget the closing JSON statement with "}").
+6. The entire output must be a complete, valid JSON object with no missing brackets (don't forget the closing JSON statement with "}"). **Do not add any comments, assumptions, introductory or finalising sentences!**.
 
 Job description:
 {job_description}

@@ -16,12 +16,12 @@ paths:
   prompts: "prompts"
 
 llm:
-  model_name: "mistral:instruct"
+  model_name: "llama3:8b-instruct-q4_K_M"
   max_retries: 2
 
 prompts:
   prompt_1: "llm_prompt_extract_v4"
-  prompt_2: "llm_prompt_levels_v4"
+  prompt_2: "llm_prompt_levels_v5"
   single_prompt: "llm_prompt_v1"
 
 skills:
@@ -38,6 +38,6 @@ extractors:
   industry_extractor: "industry_categorisation.py"
 
 processing:
-  max_jobs: 2
+  max_jobs: 5
   date_filter: "2025-10-17"  # if null, defaults to today
 
