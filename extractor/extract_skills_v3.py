@@ -18,8 +18,6 @@ def clean_job_description(text: str) -> str:
 # ==== SAFE JSON PARSER ====
 def safe_json_parse(text: str) -> dict:
     """Try to safely extract and repair JSON from a possibly malformed LLM output."""
-    print("🔍 Original LLM output length:", len(text))
-
     # ----- Step 0: Remove comments and parentheses tags -----
     # Remove // comments
     text_clean = re.sub(r'//.*', '', text)
@@ -33,7 +31,6 @@ def safe_json_parse(text: str) -> dict:
     if json_match:
         json_str = json_match.group()
         try:
-            print("✅ Step 1: Direct JSON extraction succeeded.")
             return json.loads(json_str)
         except json.JSONDecodeError as e:
             print(f"⚠️ Step 1 JSON decode failed: {e}. Trying repair...")
@@ -63,30 +60,23 @@ def safe_json_parse(text: str) -> dict:
         raise ValueError("❌ No JSON-like content found in LLM output")
 
     repaired_json_str = "\n".join(json_lines)
-    print("🔍 Reconstructed JSON string (before adding '}'):\n", repaired_json_str)
 
     # Ensure it ends with a closing '}'
     if not repaired_json_str.rstrip().endswith('}'):
         repaired_json_str = repaired_json_str.rstrip() + "\n}"
-        print("⚠️ Added missing closing '}' at the end.")
 
     # Remove trailing commas before } or ]
     repaired_json_str = re.sub(r',(\s*[}\]])', r'\1', repaired_json_str)
-    print("🔍 JSON string after removing trailing commas:\n", repaired_json_str)
 
     # ----- Step 3: Parse -----
     try:
         parsed = json.loads(repaired_json_str)
-        print("✅ JSON parsed successfully.")
         return parsed
     except json.JSONDecodeError as e:
-        print(f"⚠️ JSON strict parse failed: {e}. Trying ast.literal_eval...")
         try:
             parsed = ast.literal_eval(repaired_json_str)
-            print("✅ Parsed with ast.literal_eval.")
             return parsed
         except Exception as e2:
-            print(f"❌ JSON repair failed: {e2}")
             raise
 
 
@@ -99,22 +89,18 @@ def map_skill_with_synonyms_verbose(
     fuzzy_threshold: int = 85
 ) -> dict:
     s_norm = extracted_skill.strip().lower()
-    print(f"\n🔍 Mapping skill: '{extracted_skill}' (normalized: '{s_norm}')")
 
     if s_norm in synonym_to_skill:
         base_skill = synonym_to_skill[s_norm]
         skill_id = skill_lookup.get(base_skill.lower(), {}).get("ID")
-        print(f"✅ Exact match: '{s_norm}' → '{base_skill}' (ID={skill_id})")
         return {"mapped_to": base_skill, "ID": skill_id}
 
     best = process.extractOne(s_norm, all_synonyms, scorer=fuzz.token_sort_ratio)
     if best and best[1] >= fuzzy_threshold:
         base_skill = synonym_to_skill[best[0].lower()]
         skill_id = skill_lookup.get(base_skill.lower(), {}).get("ID")
-        print(f"🤖 Fuzzy match: '{s_norm}' → '{base_skill}' (sim={best[1]}, ID={skill_id})")
         return {"mapped_to": base_skill, "ID": skill_id}
 
-    print(f"❌ No match found for: '{s_norm}'")
     return {"mapped_to": None, "ID": None}
 
 
@@ -122,8 +108,6 @@ def map_skill_with_synonyms_verbose(
 def call_llm(prompt: str, llm_config: dict) -> str:
     model_name = llm_config.get("model_name", "mistral:instruct")
     max_retries = llm_config.get("max_retries", 1)
-
-    print(f"➡️ Calling LLM '{model_name}' with prompt (first 200 chars):\n{prompt[:200]}...\n")
 
     for attempt in range(1, max_retries + 1):
         try:
@@ -135,7 +119,6 @@ def call_llm(prompt: str, llm_config: dict) -> str:
             )
 
             if response.status_code != 200:
-                print(f"⚠️ Attempt {attempt}: LLM returned status code {response.status_code}")
                 time.sleep(1)
                 continue
 
@@ -148,9 +131,6 @@ def call_llm(prompt: str, llm_config: dict) -> str:
                         full_output += json_chunk.get("response", "")
                     except json.JSONDecodeError:
                         full_output += decoded
-
-            print(f"✅ LLM returned output of length {len(full_output)}")
-            print(f"🔍 Full LLM output:\n{full_output}\n")
 
             if not full_output.strip():
                 print(f"⚠️ Attempt {attempt}: LLM returned empty output")
@@ -172,7 +152,6 @@ def extract_skills(description: str, llm_config: dict, prompts: dict) -> dict:
     try:
         output_text = call_llm(prompt, llm_config)
         data = safe_json_parse(output_text)  # <-- robust parsing here
-        print(f"🔍 JSON extracted from LLM output:\n{json.dumps(data, indent=2)}\n")
 
         return {
             "hard_skills": data.get("hard_skills", []),
@@ -184,7 +163,6 @@ def extract_skills(description: str, llm_config: dict, prompts: dict) -> dict:
     except Exception as e:
         print(f"⚠️ extract_skills failed: {e}")
 
-    print("⚠️ Using fallback for extract_skills")
     return {"hard_skills": [], "soft_skills": [], "spoken_languages": [], "department": "null"}
 
 
@@ -200,7 +178,6 @@ def estimate_skill_levels(description: str, hard_skills: list, spoken_languages:
     try:
         output_text = call_llm(prompt, llm_config)
         data = safe_json_parse(output_text)  # <-- robust parsing here
-        print(f"🔍 JSON extracted from LLM output:\n{json.dumps(data, indent=2)}\n")
 
         return {
             "skill_levels": data.get("hard_skill_levels", {}),
@@ -216,7 +193,6 @@ def estimate_skill_levels(description: str, hard_skills: list, spoken_languages:
     except Exception as e:
         print(f"⚠️ estimate_skill_levels failed: {e}")
 
-    print("⚠️ Using fallback for estimate_skill_levels")
     return {
         "skill_levels": {skill: "unknown" for skill in hard_skills},
         "spoken_languages_levels": {lang: "unknown" for lang in spoken_languages},

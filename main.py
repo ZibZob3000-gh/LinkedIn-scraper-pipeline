@@ -64,6 +64,3 @@ for idx, job in enumerate(jobs):
 
     enriched_job = extractor.process_job(job)
     insertor.insert_job(enriched_job)
-    print(f"✅ Job {enriched_job['id']} inserted")
-
-print("🎯 All jobs processed and inserted into job_postings_enriched!")

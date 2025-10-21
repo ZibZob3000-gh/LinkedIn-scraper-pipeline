@@ -70,7 +70,6 @@ def safe_json_parse_industry(text: str) -> dict:
 
 def map_industry(company_industry_str: str, llm_config: dict) -> dict:
     if not company_industry_str.strip():
-        print("⚠️ No industry string provided.")
         return {"main_industry": "unknown", "subindustry": "unknown"}
 
     # Local keyword fallback
@@ -101,7 +100,6 @@ Rules:
 3. Respond with JSON only — no text, no explanations.
 """
     output_text = call_local_llm(prompt, llm_config)
-    print(f"🔍 LLM raw output for industry mapping:\n{output_text}\n")
 
     return safe_json_parse_industry(output_text)
 
