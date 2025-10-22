@@ -10,7 +10,7 @@ paths:
   ingestor: "ingestor"
   insertor: "insertor"
   dump: "dump"
-  data: "data/"
+  data: "data"
   builders: "builders"
   test: "test"
   prompts: "prompts"
@@ -20,8 +20,10 @@ llm:
   max_retries: 2
 
 prompts:
-  prompt_1: "llm_prompt_extract_v4"
-  prompt_2: "llm_prompt_levels_v5"
+  prompt_1: "llm_prompt_extract_skills_v1"
+  prompt_2: "llm_prompt_extract_metadata_v1"
+  prompt_3: "llm_prompt_extract_levels_v1"
+  prompt_4: "llm_prompt_extract_industry_v1"
   single_prompt: "llm_prompt_v1"
 
 skills:
@@ -35,7 +37,6 @@ files:
 
 extractors:
   skills_extractor: "extract_skills_v3.py"
-  industry_extractor: "industry_categorisation.py"
 
 processing:
   max_jobs: 5

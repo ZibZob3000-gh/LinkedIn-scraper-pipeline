@@ -1,0 +1,15 @@
+You are an expert business analyst.
+
+Return valid JSON in this exact format only:
+{
+  "main_industry": "<main_industry>",
+  "subindustry": "<subindustry>"
+}
+
+Company industry string: "{company_industry_str}"
+Industries mapping dictionary: "{industry_mapping}"
+
+Rules:
+1. Match to the best fitting main_industry and subindustry.
+2. If you cannot match, use "unknown" for both.
+3. Respond with JSON only — no text, no explanations.

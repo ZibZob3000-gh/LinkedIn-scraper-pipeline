@@ -15,27 +15,21 @@ def clean_job_description(text: str) -> str:
     return text.strip()
 
 
-# ==== SAFE JSON PARSER ====
+# ==== SAFE JSON PARSER (UNIFIED) ====
 def safe_json_parse(text: str) -> dict:
     """Try to safely extract and repair JSON from a possibly malformed LLM output."""
-    # ----- Step 0: Remove comments and parentheses tags -----
-    # Remove // comments
     text_clean = re.sub(r'//.*', '', text)
-    # Remove any (optional) or similar tags after strings inside arrays
     text_clean = re.sub(r'\(".*?"\)|\s*\(.*?\)', '', text_clean)
-    # Remove angle brackets or any <tags>
     text_clean = re.sub(r'<.*?>', '', text_clean)
 
-    # ----- Step 1: Extract block between first '{' and last '}' -----
     json_match = re.search(r'{.*}', text_clean, re.DOTALL)
     if json_match:
         json_str = json_match.group()
         try:
             return json.loads(json_str)
-        except json.JSONDecodeError as e:
-            print(f"⚠️ Step 1 JSON decode failed: {e}. Trying repair...")
+        except json.JSONDecodeError:
+            pass
 
-    # ----- Step 2: Attempt smart reconstruction if last closing bracket missing -----
     start_idx = text_clean.find('{')
     if start_idx == -1:
         raise ValueError("❌ No JSON object found in LLM output")
@@ -46,38 +40,29 @@ def safe_json_parse(text: str) -> dict:
 
     for line in lines:
         stripped = line.strip()
-        # Keep lines that look like JSON
-        if stripped.startswith('"') or stripped.endswith('}') or stripped.endswith(']') or stripped.endswith(',') or stripped.endswith('{') or stripped.endswith('['):
-            # Remove any inline parentheses or trailing comments again just in case
+        if stripped.startswith('"') or stripped.endswith(('}', ']', ',', '{', '[')):
             line_clean = re.sub(r'\s*\(.*?\)', '', line)
             line_clean = re.sub(r'//.*', '', line_clean)
             json_lines.append(line_clean)
         else:
-            # Stop adding if line clearly isn't part of JSON
             break
 
     if not json_lines:
         raise ValueError("❌ No JSON-like content found in LLM output")
 
     repaired_json_str = "\n".join(json_lines)
-
-    # Ensure it ends with a closing '}'
     if not repaired_json_str.rstrip().endswith('}'):
         repaired_json_str = repaired_json_str.rstrip() + "\n}"
 
-    # Remove trailing commas before } or ]
     repaired_json_str = re.sub(r',(\s*[}\]])', r'\1', repaired_json_str)
 
-    # ----- Step 3: Parse -----
     try:
-        parsed = json.loads(repaired_json_str)
-        return parsed
-    except json.JSONDecodeError as e:
+        return json.loads(repaired_json_str)
+    except json.JSONDecodeError:
         try:
-            parsed = ast.literal_eval(repaired_json_str)
-            return parsed
-        except Exception as e2:
-            raise
+            return ast.literal_eval(repaired_json_str)
+        except Exception:
+            return {}
 
 
 # ==== SKILL MAPPING ====
@@ -104,7 +89,7 @@ def map_skill_with_synonyms_verbose(
     return {"mapped_to": None, "ID": None}
 
 
-# ==== LOCAL LLM CALL WITH DEBUGGING ====
+# ==== LOCAL LLM CALL ====
 def call_llm(prompt: str, llm_config: dict) -> str:
     model_name = llm_config.get("model_name", "mistral:instruct")
     max_retries = llm_config.get("max_retries", 1)
@@ -132,9 +117,7 @@ def call_llm(prompt: str, llm_config: dict) -> str:
                     except json.JSONDecodeError:
                         full_output += decoded
 
-            if not full_output.strip():
-                print(f"⚠️ Attempt {attempt}: LLM returned empty output")
-            else:
+            if full_output.strip():
                 return full_output
 
         except Exception as e:
@@ -144,44 +127,37 @@ def call_llm(prompt: str, llm_config: dict) -> str:
     raise RuntimeError(f"❌ LLM call failed after {max_retries} attempts. Check that the model '{model_name}' is installed and running.")
 
 
-# ==== SKILL + LANGUAGE EXTRACTION ====
+# ==== SKILL + LANGUAGE EXTRACTION (LLM Call 1) ====
 def extract_skills(description: str, llm_config: dict, prompts: dict) -> dict:
     prompt_template = prompts.get("prompt_1") or prompts.get("single_prompt", "")
     prompt = prompt_template.replace("{job_description}", description)
 
     try:
         output_text = call_llm(prompt, llm_config)
-        data = safe_json_parse(output_text)  # <-- robust parsing here
+        data = safe_json_parse(output_text)
 
         return {
             "hard_skills": data.get("hard_skills", []),
-            "soft_skills": data.get("soft_skills", []),
-            "spoken_languages": data.get("spoken_languages", []),
-            "department": data.get("department", "null")
+            "soft_skills": data.get("soft_skills", [])
         }
 
     except Exception as e:
         print(f"⚠️ extract_skills failed: {e}")
+        return {"hard_skills": [], "soft_skills": []}
 
-    return {"hard_skills": [], "soft_skills": [], "spoken_languages": [], "department": "null"}
 
-
-# ==== LEVELS, CONTACT, LANGUAGE PROFICIENCY EXTRACTION ====
-def estimate_skill_levels(description: str, hard_skills: list, spoken_languages: list, llm_config: dict, prompts: dict) -> dict:
+# ==== LANGUAGE, DEPARTMENT, CONTACT (LLM Call 2) ====
+def extract_language_and_contact(description: str, llm_config: dict, prompts: dict) -> dict:
     prompt_template = prompts.get("prompt_2") or prompts.get("single_prompt", "")
-    hard_skills_str = ", ".join(hard_skills)
-    spoken_languages_str = ", ".join(spoken_languages)
-    prompt = prompt_template.replace("{job_description}", description)\
-                            .replace("{hard_skills}", hard_skills_str)\
-                            .replace("{spoken_languages}", spoken_languages_str)
+    prompt = prompt_template.replace("{job_description}", description)
 
     try:
         output_text = call_llm(prompt, llm_config)
-        data = safe_json_parse(output_text)  # <-- robust parsing here
+        data = safe_json_parse(output_text)
 
         return {
-            "skill_levels": data.get("hard_skill_levels", {}),
-            "spoken_languages_levels": data.get("spoken_languages_levels", {}),
+            "spoken_languages": data.get("spoken_languages", []),
+            "department": data.get("department", "null"),
             "contact_details": data.get("contact_details", {
                 "name": "not provided",
                 "email": "not provided",
@@ -191,15 +167,65 @@ def estimate_skill_levels(description: str, hard_skills: list, spoken_languages:
         }
 
     except Exception as e:
-        print(f"⚠️ estimate_skill_levels failed: {e}")
+        print(f"⚠️ extract_language_and_contact failed: {e}")
+        return {
+            "spoken_languages": [],
+            "department": "null",
+            "contact_details": {
+                "name": "not provided",
+                "email": "not provided",
+                "phone_number": "not provided"
+            },
+            "language_description": "not detected"
+        }
 
-    return {
-        "skill_levels": {skill: "unknown" for skill in hard_skills},
-        "spoken_languages_levels": {lang: "unknown" for lang in spoken_languages},
-        "contact_details": {
-            "name": "not provided",
-            "email": "not provided",
-            "phone_number": "not provided"
-        },
-        "language_description": "not detected"
-    }
+
+# ==== SKILL & LANGUAGE LEVELS (LLM Call 3) ====
+def estimate_skill_levels(hard_skills: list, spoken_languages: list, description: str, llm_config: dict, prompts: dict) -> dict:
+    prompt_template = prompts.get("prompt_3") or prompts.get("single_prompt", "")
+    hard_skills_str = ", ".join(hard_skills)
+    spoken_languages_str = ", ".join(spoken_languages)
+    prompt = prompt_template.replace("{job_description}", description)\
+                            .replace("{hard_skills}", hard_skills_str)\
+                            .replace("{spoken_languages}", spoken_languages_str)
+
+    try:
+        output_text = call_llm(prompt, llm_config)
+        data = safe_json_parse(output_text)
+
+        return {
+            "skill_levels": data.get("hard_skill_levels", {}),
+            "spoken_languages_levels": data.get("spoken_languages_levels", {})
+        }
+
+    except Exception as e:
+        print(f"⚠️ estimate_skill_levels failed: {e}")
+        return {
+            "skill_levels": {skill: "unknown" for skill in hard_skills},
+            "spoken_languages_levels": {lang: "unknown" for lang in spoken_languages}
+        }
+
+
+# ==== INDUSTRY MAPPING (LLM Call 4) ====
+def map_industry(company_industry_str: str, llm_config: dict, industry_mapping: dict, prompts: dict) -> dict:
+    if not company_industry_str.strip():
+        return {"main_industry": "unknown", "subindustry": "unknown"}
+
+    prompt_template = prompts.get("prompt_4", "")
+    industry_mapping_str = json.dumps(industry_mapping, indent=2)
+    prompt = prompt_template.replace("{company_industry_str}", company_industry_str)\
+                            .replace("{industry_mapping}", industry_mapping_str)
+
+    try:
+        output_text = call_llm(prompt, llm_config)
+        data = safe_json_parse(output_text)
+
+        # Validate keys
+        if "main_industry" not in data or "subindustry" not in data:
+            return {"main_industry": "unknown", "subindustry": "unknown"}
+
+        return data
+
+    except Exception as e:
+        print(f"⚠️ map_industry failed: {e}")
+        return {"main_industry": "unknown", "subindustry": "unknown"}

@@ -21,12 +21,9 @@ db_conf = {
     "port": postgres_conf.get("port", 5433),
 }
 
-# ==== IMPORT EXTRACTOR MODULES DYNAMICALLY ====
+# ==== IMPORT EXTRACTOR MODULE(S) DYNAMICALLY ====
 skills_module_path = f"{config['paths']['extractors']}.{config['extractors']['skills_extractor'][:-3]}"
-industry_module_path = f"{config['paths']['extractors']}.{config['extractors']['industry_extractor'][:-3]}"
-
 skills_module = import_module(skills_module_path)
-industry_module = import_module(industry_module_path)
 
 # ==== LOAD DATA FILES ====
 data_dir = config["paths"]["data"]
@@ -35,6 +32,11 @@ skills_data = {
     "synonyms": json.load(open(os.path.join(data_dir, config["skills"]["synonyms_file"]), "r", encoding="utf-8")),
     "fuzzy_threshold": config["skills"].get("fuzzy_threshold", 85),
 }
+
+# ==== LOAD INDUSTRY MAPPINGS ====
+industry_mapping_path = os.path.join(data_dir, "industry_mappings.json")
+with open(industry_mapping_path, "r", encoding="utf-8") as f:
+    industry_mapping = json.load(f)
 
 # ==== LOAD PROMPTS ====
 prompts_dir = config["paths"]["prompts"]
@@ -46,7 +48,13 @@ for key, filename in config["prompts"].items():
 # ==== INIT COMPONENTS ====
 ingestor = PostgresIngestor(**db_conf)
 insertor = PostgresInsertor(**db_conf)
-extractor = JobExtractor(skills_module, industry_module, skills_data, config["llm"], prompts)
+extractor = JobExtractor(
+    skills_module=skills_module,
+    skills_data=skills_data,
+    llm_config=config["llm"],
+    prompts=prompts,
+    industry_mapping=industry_mapping  # pass the loaded mapping here
+)
 
 # ==== FETCH JOBS ====
 columns_to_fetch = None  # fetch all columns
@@ -64,3 +72,6 @@ for idx, job in enumerate(jobs):
 
     enriched_job = extractor.process_job(job)
     insertor.insert_job(enriched_job)
+    print(f"✅ Job {enriched_job['id']} inserted")
+
+print("🎯 All jobs processed and inserted into job_postings_enriched!")
