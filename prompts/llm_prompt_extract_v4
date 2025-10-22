@@ -12,10 +12,26 @@ Return **ONLY valid JSON** in this exact format, with no extra text, notes, assu
 >>
 
 Rules:
-1. Hard skills: programming languages, frameworks, libraries, tools, platforms, orchestration, cloud services, APIs, databases, technical competencies.
+1. Hard skills: Extract **only technical and digital competencies** — things that can be installed, coded, configured, or executed on a computer system.
+    a. Valid categories (include examples):
+       - Programming languages (Python, Java, C#, JavaScript, SQL, etc.)
+       - Libraries and frameworks (React, TensorFlow, PyTorch, Spring, etc.)
+       - Databases and query tools (MySQL, PostgreSQL, MongoDB, Power BI, etc.)
+       - Cloud & DevOps (AWS, Azure, GCP, Docker, Kubernetes, Jenkins, Terraform)
+       - APIs, data formats, protocols (REST, GraphQL, JSON, XML)
+       - OS / platforms (Linux, Windows Server, SAP modules if explicitly technical)
+       - Tools & software directly related to IT or data (Git, Jira, Tableau, etc.)
+    b. EXCLUDE the following completely:
+       - Management or methodology certifications (PRINCE2, PMP, ITIL, AgilePM, Lean Six Sigma, Scrum Master)
+       - Business processes or domains (billing, procurement, finance, logistics, meter-to-cash)
+       - Soft skills, general abilities, or education fields (communication, analysis, "Master en pharmacie", "problem-solving")
+       - Industry jargon or product categories unless they represent actual software or technology.
+    c. Output only unique, concise, technology-related skill names in English.
 2. Soft skills: teamwork, communication, leadership, adaptability, problem-solving, and other interpersonal or cognitive skills.
-3. Spoken languages: extract all languages explicitly mentioned as requirements for the role (e.g., "fluent in English", "conversational Spanish") without making assumptions.
+3. Spoken languages: extract all languages explicitly mentioned as requirements for the role (e.g., "fluent in English", "conversational Spanish") without making assumptions (e.g. "spoken_languages": ["English, Dutch, ..."],)
    - Do **not** include programming languages here.
+   - write abbreviations in full (e.g. if "FR" is found -> put "French" as "spoken_language")
+   - make sure spoken_languages" is always outputted in English (e.g. if "Nederlands" is found -> put "Dutch" as spoken_language)
    - Only if no language is mentioned, insert "unknown" as language.
 4. For multiple skills or languages separated by "/", "or", "and", or in parentheses, extract each separately. Do **not** include "(optional)" or any extra tags.
 5. Department must be one of:

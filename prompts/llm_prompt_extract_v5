@@ -1,0 +1,85 @@
+You are an expert technical recruiter. Your job is to EXTRACT ONLY what is explicitly written in the job description below — no assumptions, no guesses.
+
+Return **ONLY valid JSON** in the exact format below, with no extra text before or after:
+
+<<
+{
+  "hard_skills": ["..."],
+  "soft_skills": ["..."],
+  "spoken_languages": ["..."],
+  "department": "..."
+}
+>>
+
+==============================
+STRICT EXTRACTION RULES
+==============================
+
+1. HARD SKILLS
+------------------------------
+Extract **only technical or digital competencies that literally appear in the text.**
+- Include only items that are actual software, programming languages, tools, or platforms.
+- Examples that are valid **only if explicitly mentioned in the text**:
+  - Programming: Python, Java, C#, SQL, JavaScript
+  - Frameworks/libraries: React, TensorFlow, PyTorch, Spring
+  - Databases & BI: MySQL, PostgreSQL, MongoDB, Power BI
+  - Cloud & DevOps: AWS, Azure, Docker, Kubernetes, Jenkins, Terraform
+  - APIs, formats, protocols: REST, GraphQL, JSON, XML
+  - OS/Platforms: Linux, Windows Server, SAP (only if “SAP ABAP”, “SAP Fiori”, or another technical module)
+  - Tools: Git, Jira, Tableau, VS Code, Jenkins, etc.
+
+🚫 EXCLUDE completely:
+- Certifications or methodologies (PMP, PRINCE2, ITIL, AgilePM, Lean Six Sigma, Scrum Master)
+- Education fields or diplomas (e.g., “Master in pharmacy”, “Bachelor in economics”, “informatics”)
+- Business domains (billing, finance, logistics, meter-to-cash)
+- General or conceptual terms (analysis, design, process, problem-solving)
+- Anything not clearly referring to software, code, data, or a technical tool.
+
+❗If no valid technical tools or technologies are mentioned, return `"hard_skills": []`.
+
+---
+
+2. SOFT SKILLS
+------------------------------
+Include only interpersonal or cognitive abilities **explicitly written** in the text (e.g., teamwork, communication, leadership, adaptability, problem-solving).
+
+---
+
+3. SPOKEN LANGUAGES
+------------------------------
+Extract every natural language **explicitly mentioned** as required for the role.
+- Convert abbreviations (FR → French, NL → Dutch).
+- Translate to English (e.g., “Nederlands” → “Dutch”).
+- Do not include programming languages.
+- If none are found, return `"spoken_languages": ["unknown"]`.
+
+---
+
+4. DEPARTMENT
+------------------------------
+Choose exactly one of:
+["Engineering","Information Technology","Human Resources","Finance","Marketing","Sales","Legal","Operations","Customer Support","Product Management","Research & Development","Data & Analytics","Supply Chain","Administration","Quality Assurance"]
+
+If unclear, infer the closest fit based on explicit words like “developer”, “finance team”, “marketing analyst”, etc.
+
+---
+
+5. JSON FORMAT
+------------------------------
+- Output one single valid JSON object.
+- Must start with `{` and end with `}`.
+- No comments, no notes, no invented data.
+
+---
+
+⚠️ FINAL INSTRUCTION (critical for accuracy)
+Before output:
+- Verify that every item in `"hard_skills"` is **literally written** in the job description.
+- Remove any items not found verbatim.
+- If uncertain whether a word counts as a technical skill, **exclude it**.
+- Prefer an empty list over invented content.
+
+---
+
+Job description:
+{job_description}

@@ -17,18 +17,20 @@ def clean_job_description(text: str) -> str:
 
 # ==== SAFE JSON PARSER ====
 def safe_json_parse(text: str) -> dict:
-    """Try to safely extract and repair JSON from a possibly malformed LLM output."""
+    """Safely extract and repair JSON from possibly malformed LLM output."""
     print("🔍 Original LLM output length:", len(text))
 
-    # ----- Step 0: Remove comments and parentheses tags -----
-    # Remove // comments
-    text_clean = re.sub(r'//.*', '', text)
-    # Remove any (optional) or similar tags after strings inside arrays
+    # ===== Step 0: Clean obvious non-JSON artifacts =====
+    # Remove // comments that are NOT part of URLs or inside strings
+    text_clean = re.sub(r'(?<!:)//\s.*$', '', text, flags=re.MULTILINE)
+
+    # Remove (optional) or similar tags inside parentheses
     text_clean = re.sub(r'\(".*?"\)|\s*\(.*?\)', '', text_clean)
-    # Remove angle brackets or any <tags>
+
+    # Remove <tags> or angle-bracket metadata
     text_clean = re.sub(r'<.*?>', '', text_clean)
 
-    # ----- Step 1: Extract block between first '{' and last '}' -----
+    # ===== Step 1: Extract JSON block =====
     json_match = re.search(r'{.*}', text_clean, re.DOTALL)
     if json_match:
         json_str = json_match.group()
@@ -38,7 +40,7 @@ def safe_json_parse(text: str) -> dict:
         except json.JSONDecodeError as e:
             print(f"⚠️ Step 1 JSON decode failed: {e}. Trying repair...")
 
-    # ----- Step 2: Attempt smart reconstruction if last closing bracket missing -----
+    # ===== Step 2: Smart reconstruction =====
     start_idx = text_clean.find('{')
     if start_idx == -1:
         raise ValueError("❌ No JSON object found in LLM output")
@@ -49,14 +51,14 @@ def safe_json_parse(text: str) -> dict:
 
     for line in lines:
         stripped = line.strip()
-        # Keep lines that look like JSON
-        if stripped.startswith('"') or stripped.endswith('}') or stripped.endswith(']') or stripped.endswith(',') or stripped.endswith('{') or stripped.endswith('['):
-            # Remove any inline parentheses or trailing comments again just in case
+        if stripped.startswith('"') or any(stripped.endswith(x) for x in ['}', ']', ',', '{', '[']):
+            # Remove parentheses comments again
             line_clean = re.sub(r'\s*\(.*?\)', '', line)
-            line_clean = re.sub(r'//.*', '', line_clean)
+            # Remove inline comments (but not URLs)
+            line_clean = re.sub(r'(?<!:)//\s.*$', '', line_clean)
             json_lines.append(line_clean)
         else:
-            # Stop adding if line clearly isn't part of JSON
+            # Stop if clearly not JSON anymore
             break
 
     if not json_lines:
@@ -65,7 +67,7 @@ def safe_json_parse(text: str) -> dict:
     repaired_json_str = "\n".join(json_lines)
     print("🔍 Reconstructed JSON string (before adding '}'):\n", repaired_json_str)
 
-    # Ensure it ends with a closing '}'
+    # Ensure it ends with a closing brace
     if not repaired_json_str.rstrip().endswith('}'):
         repaired_json_str = repaired_json_str.rstrip() + "\n}"
         print("⚠️ Added missing closing '}' at the end.")
@@ -74,16 +76,19 @@ def safe_json_parse(text: str) -> dict:
     repaired_json_str = re.sub(r',(\s*[}\]])', r'\1', repaired_json_str)
     print("🔍 JSON string after removing trailing commas:\n", repaired_json_str)
 
-    # ----- Step 3: Parse -----
+    # ===== Step 3: Parse safely =====
     try:
         parsed = json.loads(repaired_json_str)
         print("✅ JSON parsed successfully.")
         return parsed
     except json.JSONDecodeError as e:
         print(f"⚠️ JSON strict parse failed: {e}. Trying ast.literal_eval...")
+
+        # Replace true/false/null to Python equivalents for literal_eval
+        alt_str = repaired_json_str.replace("true", "True").replace("false", "False").replace("null", "None")
         try:
-            parsed = ast.literal_eval(repaired_json_str)
-            print("✅ Parsed with ast.literal_eval.")
+            parsed = ast.literal_eval(alt_str)
+            print("✅ Parsed successfully with ast.literal_eval.")
             return parsed
         except Exception as e2:
             print(f"❌ JSON repair failed: {e2}")
