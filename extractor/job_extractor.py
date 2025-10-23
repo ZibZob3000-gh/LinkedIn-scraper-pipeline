@@ -34,7 +34,7 @@ class JobExtractor:
         description = self.skills_module.clean_job_description(desc_raw)
 
         # === Step 1: Extract hard + soft skills ===
-        skills_data = self.skills_module.extract_skills_only(description, self.llm_config, self.prompts)
+        skills_data = self.skills_module.extract_skills(description, self.llm_config, self.prompts)
         hard_skills = [s.strip() for s in skills_data.get("hard_skills", []) if s.strip()]
         soft_skills = [s.strip() for s in skills_data.get("soft_skills", []) if s.strip()]
 
@@ -47,7 +47,7 @@ class JobExtractor:
 
         # === Step 3: Extract levels ===
         level_data = self.skills_module.extract_skill_levels(
-            description, hard_skills, spoken_languages, self.llm_config, self.prompts
+            hard_skills, spoken_languages, description, self.llm_config, self.prompts
         )
         hard_skill_levels = level_data["hard_skill_levels"]
         spoken_languages_levels = level_data["spoken_languages_levels"]

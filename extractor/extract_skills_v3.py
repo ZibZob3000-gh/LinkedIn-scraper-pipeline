@@ -71,7 +71,7 @@ def map_skill_with_synonyms_verbose(
     synonym_to_skill: dict,
     skill_lookup: dict,
     all_synonyms: list,
-    fuzzy_threshold: int = 85
+    fuzzy_threshold: int = 95
 ) -> dict:
     s_norm = extracted_skill.strip().lower()
 
@@ -100,7 +100,7 @@ def call_llm(prompt: str, llm_config: dict) -> str:
                 "http://localhost:11434/api/generate",
                 json={"model": model_name, "prompt": prompt},
                 stream=True,
-                timeout=30
+                timeout=60
             )
 
             if response.status_code != 200:
@@ -147,7 +147,7 @@ def extract_skills(description: str, llm_config: dict, prompts: dict) -> dict:
 
 
 # ==== LANGUAGE, DEPARTMENT, CONTACT (LLM Call 2) ====
-def extract_language_and_contact(description: str, llm_config: dict, prompts: dict) -> dict:
+def extract_metadata(description: str, llm_config: dict, prompts: dict) -> dict:
     prompt_template = prompts.get("prompt_2") or prompts.get("single_prompt", "")
     prompt = prompt_template.replace("{job_description}", description)
 
@@ -181,7 +181,7 @@ def extract_language_and_contact(description: str, llm_config: dict, prompts: di
 
 
 # ==== SKILL & LANGUAGE LEVELS (LLM Call 3) ====
-def estimate_skill_levels(hard_skills: list, spoken_languages: list, description: str, llm_config: dict, prompts: dict) -> dict:
+def extract_skill_levels(hard_skills: list, spoken_languages: list, description: str, llm_config: dict, prompts: dict) -> dict:
     prompt_template = prompts.get("prompt_3") or prompts.get("single_prompt", "")
     hard_skills_str = ", ".join(hard_skills)
     spoken_languages_str = ", ".join(spoken_languages)
@@ -194,14 +194,14 @@ def estimate_skill_levels(hard_skills: list, spoken_languages: list, description
         data = safe_json_parse(output_text)
 
         return {
-            "skill_levels": data.get("hard_skill_levels", {}),
+            "hard_skill_levels": data.get("hard_skill_levels", {}),
             "spoken_languages_levels": data.get("spoken_languages_levels", {})
         }
 
     except Exception as e:
         print(f"⚠️ estimate_skill_levels failed: {e}")
         return {
-            "skill_levels": {skill: "unknown" for skill in hard_skills},
+            "hard_skill_levels": {skill: "unknown" for skill in hard_skills},
             "spoken_languages_levels": {lang: "unknown" for lang in spoken_languages}
         }
 

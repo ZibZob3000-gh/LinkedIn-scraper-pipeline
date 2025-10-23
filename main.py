@@ -2,7 +2,6 @@ import yaml
 import json
 import os
 from importlib import import_module
-from datetime import date
 from ingestor.postgres_ingestor import PostgresIngestor
 from insertor.postgres_insertor import PostgresInsertor
 from extractor.job_extractor import JobExtractor
@@ -59,10 +58,9 @@ extractor = JobExtractor(
 # ==== FETCH JOBS ====
 columns_to_fetch = None  # fetch all columns
 date_filter = config.get("processing", {}).get("date_filter")
-if date_filter is None:
-    date_filter = date.today().isoformat()  # default to today
+date_range = config.get("processing", {}).get("date_range")
 
-jobs = ingestor.fetch_job_data(columns=columns_to_fetch, date_filter=date_filter)
+jobs = ingestor.fetch_job_data(columns=columns_to_fetch, date_filter=date_filter, date_range=date_range)
 
 # ==== PROCESS AND INSERT ====
 max_jobs = config.get("processing", {}).get("max_jobs")  # None if not set

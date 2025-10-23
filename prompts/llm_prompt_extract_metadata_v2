@@ -1,0 +1,59 @@
+You are an expert HR analyst. Your task is to EXTRACT metadata from a job description.
+
+Return *ONLY valid JSON* in this exact structure — no text outside JSON:
+
+<<
+{
+  "language_description": "...",
+  "spoken_languages": ["..."],
+  "department": "...",
+  "contact_details": {
+    "name": "not provided",
+    "email": "not provided",
+    "phone_number": "not provided"
+  }
+}
+>>
+
+==============================
+EXTRACTION RULES
+==============================
+
+1. language_description:
+- Detect the *main language* used in the first two sentences of the job description.
+- Choose from: ["English", "Dutch", "French", "German", "Spanish", "Italian", "unknown"].
+
+2. spoken_languages:
+- Extract all natural languages explicitly mentioned as job requirements.
+- Convert abbreviations (FR→French, NL→Dutch).
+- Translate to English.
+- If none, return ["unknown"].
+
+3. department:
+- Identify the *business or functional department that the role supports or works for*, not the candidate’s own technical domain.
+  - Example: If the job is for an IT engineer implementing finance systems, the department should be "Finance", not "Information Technology".
+  - Example: A data analyst for a marketing campaign → "Marketing".
+  - Example: A software developer working on HR software → "Human Resources".
+
+- Choose exactly one department from this list:
+["Engineering","Information Technology","Human Resources","Finance","Accounting","Marketing","Sales","Legal","Operations","Customer Support","Product Management","Research & Development","Data & Analytics","Supply Chain","Procurement","Administration","Quality Assurance","Production","Manufacturing","Logistics","Maintenance","Design","Communications","Consulting","Healthcare","Education","Public Sector","Real Estate","Security"]
+
+- If no clear match can be made, return "unknown".
+
+4. contact_details:
+- Try to extract contact name, email, and phone number from the job description.
+- If an email address is found:
+  - Check if it follows a personal format like "firstname.lastname@..." or "f.lastname@...".
+  - If so, infer the full name (capitalize each part, e.g., "john.doe@company.com" → "John Doe").
+  - If the email looks generic (e.g., "hr@company.com", "info@", "careers@", "contact@"), leave the name as "not provided".
+- If any of the three fields are missing, fill them with "not provided".
+
+==============================
+FORMAT REQUIREMENTS
+==============================
+- Must start with { and end with }
+- Must be valid JSON, no comments or text outside the JSON.
+- Do not explain or describe the result in words — only return the JSON object.
+
+Job description:
+{job_description}

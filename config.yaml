@@ -18,10 +18,11 @@ paths:
 llm:
   model_name: "llama3:8b-instruct-q4_K_M"
   max_retries: 2
+  temperature: 0
 
 prompts:
-  prompt_1: "llm_prompt_extract_skills_v1"
-  prompt_2: "llm_prompt_extract_metadata_v1"
+  prompt_1: "llm_prompt_extract_skills_v3"
+  prompt_2: "llm_prompt_extract_metadata_v2"
   prompt_3: "llm_prompt_extract_levels_v1"
   prompt_4: "llm_prompt_extract_industry_v1"
   single_prompt: "llm_prompt_v1"
@@ -29,7 +30,7 @@ prompts:
 skills:
   taxonomy_file: "skill_to_info.json"
   synonyms_file: "skill_synonyms.json"
-  fuzzy_threshold: 85
+  fuzzy_threshold: 95
 
 files:
   descriptions: "Descriptions.json"
@@ -39,6 +40,7 @@ extractors:
   skills_extractor: "extract_skills_v3.py"
 
 processing:
-  max_jobs: 5
-  date_filter: "2025-10-17"  # if null, defaults to today
+  max_jobs: 30
+  date_filter: null  # overwrites date_range, standard: null, defaults to today if no filter/range is given
+  date_range: ["2025-10-10", "2025-10-12"] # standard: null, example: ["2025-10-20", "2025-10-22"]
 

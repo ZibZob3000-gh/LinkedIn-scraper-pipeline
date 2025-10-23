@@ -1,6 +1,7 @@
-You are an expert technical recruiter. Your job is to EXTRACT ONLY what is explicitly written in the job description below — no assumptions, no guesses.
+You are an expert technical recruiter.
+Your task is to - using the STRICT EXTRACTION RULES - hard skills and soft skills out of the section "LINKEDIN JOB VACANCY" — no assumptions, no guesses, no inventions.
 
-Return *ONLY valid JSON* in the exact format below, with no extra text before or after:
+Return ONLY valid JSON in the exact format below, with no extra text before or after:
 
 <<
 {
@@ -12,34 +13,44 @@ Return *ONLY valid JSON* in the exact format below, with no extra text before or
 ==============================
 STRICT EXTRACTION RULES
 ==============================
+Extract *only technical or digital competencies that literally appear under "LINKEDIN JOB VACANCY"*.
 
 1. HARD SKILLS
 ------------------------------
-Extract *only technical or digital competencies that literally appear in the text.*
-Examples (if explicitly mentioned):
-  - Programming: Python, Java, C#, SQL, JavaScript
-  - Frameworks: React, TensorFlow, PyTorch, Spring
-  - Databases: MySQL, PostgreSQL, MongoDB
-  - Cloud/DevOps: AWS, Azure, Docker, Kubernetes, Jenkins
-  - Tools: Git, Jira, Tableau, Power BI, Jenkins, VS Code
+Include ONLY items that are:
+- Programming languages (examples: Python, Java, C#, SQL, JavaScript, etc.)
+- Frameworks/libraries (examples: React, TensorFlow, PyTorch, Spring, etc.)
+- Databases/BI tools (examples: MySQL, PostgreSQL, MongoDB, Power BI, Tableau, DAX, etc.)
+- Cloud & DevOps platforms/tools (examples: AWS, Azure, Docker, Kubernetes, Jenkins, Terraform, etc.)
+- Software or platform tools explicitly mentioned (examples: Git, Jira, VS Code, SAP ABAP, etc.)
+- APIs, protocols, or file formats (examples: REST, GraphQL, JSON, XML)
 
-🚫 Exclude:
-- Certifications (PMP, ITIL)
-- Education or diplomas
-- Business domains (finance, logistics)
-- Conceptual terms (analysis, design, creativity)
+🚫 DO NOT include anything that is:
+- Certifications (examples: PMP, PRINCE2, ITIL, etc.)
+- Methodologies or frameworks not considered technical tools (examples: Agile, Scrum, Lean, Project Management Frameworks, Tools & Methodologies)
+- Business domains (examples: finance, logistics, supply chain, procurement, energy, etc.)
+- Conceptual or managerial terms (examples: Project Leadership, Risk Management, Communication, Collaboration, Data & Analytics Mindset)
+- Education, diplomas, or degrees
+- Soft skills (examples: teamwork, leadership, adaptability, problem-solving, stakeholder engagement, etc.)
 
-❗If none found, return `"hard_skills": []`.
+❗If none found, return "hard_skills": [].
 
 2. SOFT SKILLS
 ------------------------------
-Extract only interpersonal or cognitive abilities explicitly written (teamwork, communication, leadership, adaptability, etc.).
+Include ONLY interpersonal, cognitive, or managerial abilities explicitly written in the text.
+Examples: teamwork, communication, collaboration, leadership, adaptability, problem-solving, stakeholder engagement, analytical mindset, ownership mentality.
+
+- Do NOT include tools, software, programming languages, certifications, or business domains.
+- If none found, return "soft_skills": [].
 
 ==============================
 FORMAT REQUIREMENTS
 ==============================
-- Return exactly one valid JSON object
-- No notes, no comments, no text outside JSON
+- Return exactly one valid JSON object.
+- No notes, no comments, no extra text.
+- Hard skills and soft skills must not overlap.
 
-Job description:
+==============================
+LINKEDIN JOB VACANCY
+==============================
 {job_description}

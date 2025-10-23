@@ -3,13 +3,14 @@
     "IT Services",
     "Software Development",
     "Data Analytics",
-    "Cloud",
     "Cloud Computing",
     "Cybersecurity",
     "Artificial Intelligence",
     "Machine Learning",
-    "IT Consulting",
-    "Software Engineering"
+    "Software Engineering",
+    "Data Engineering",
+    "Data Science",
+    "Data Governance"
   ],
   "Financial Services": [
     "Banking",
@@ -17,8 +18,7 @@
     "Insurance",
     "Accounting",
     "Fintech",
-    "Wealth Management",
-    "Financial Consulting"
+    "Wealth Management"
   ],
   "Manufacturing": [
     "Machinery",
@@ -41,7 +41,7 @@
     "Hospitals",
     "Medical Devices",
     "Clinical Research",
-    "Pharma Manufacturing"
+    "Pharmaceutical Manufacturing"
   ],
   "Energy & Utilities": [
     "Oil",
@@ -68,6 +68,7 @@
     "Food Production",
     "Food Manufacturing",
     "Beverage Manufacturing",
+    "Beverage Production",
     "Restaurants",
     "Food Processing",
     "Catering",
@@ -120,12 +121,17 @@
     "Regulatory Affairs"
   ],
   "Legal & Consulting Services": [
-    "Law",
-    "Legal Services",
-    "Business Consulting",
-    "Tax Advisory",
-    "Corporate Law",
-    "Management Consulting"
+  "Law",
+  "Legal Services",
+  "Corporate Law",
+  "Tax Advisory",
+  "Risk Advisory",
+  "Business Consulting",
+  "Management Consulting",
+  "IT Consulting",
+  "Financial Consulting",
+  "Strategy Consulting",
+  "HR Consulting"
   ],
   "Agriculture & Natural Resources": [
     "Farming",

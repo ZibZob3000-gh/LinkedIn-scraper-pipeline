@@ -1,15 +1,40 @@
-You are an expert business analyst.
+You are an expert business analyst specializing in industry classification.
 
-Return valid JSON in this exact format only:
+Your task:
+Given a company industry string, identify the correct **main_industry** and **subindustry** from the provided mapping dictionary.
+
+You must return a VALID JSON object in exactly the format below:
 {
   "main_industry": "<main_industry>",
   "subindustry": "<subindustry>"
 }
 
-Company industry string: "{company_industry_str}"
-Industries mapping dictionary: "{industry_mapping}"
+Inputs:
+- Company industry string: "{company_industry_str}"
+- Industry mapping dictionary: {industry_mapping}
 
-Rules:
-1. Match to the best fitting main_industry and subindustry.
-2. If you cannot match, use "unknown" for both.
-3. Respond with JSON only — no text, no explanations.
+==============================
+STRICT RULES
+==============================
+1. The value for "main_industry" MUST be one of the MAIN KEYS in the dictionary.
+2. The value for "subindustry" MUST be EXACTLY one of the items listed under that same main_industry.
+3. If no close match is found, return:
+   {
+     "main_industry": "unknown",
+     "subindustry": "unknown"
+   }
+4. NEVER invent, rephrase, or add new subindustries — only pick from the given dictionary.
+5. NEVER repeat the same word (e.g., “Retail”: “Retail”).
+6. Respond ONLY with the JSON object — no explanations, no notes, no extra characters.
+7. The JSON must be syntactically valid — parsable without errors.
+
+==============================
+EXAMPLE
+==============================
+Example input: "Cybersecurity Consulting"
+Example valid output:
+{
+  "main_industry": "Legal & Consulting Services",
+  "subindustry": "IT Consulting"
+}
+

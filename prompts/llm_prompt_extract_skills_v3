@@ -1,0 +1,68 @@
+You are an expert technical recruiter and NLP analyst specializing in automated skill extraction.
+
+Your task:
+From the section "LINKEDIN JOB VACANCY", extract all hard and soft skills exactly as written — no assumptions, no rewording, no examples from outside the text.
+Your goal is to capture every explicit technical or interpersonal skill, even when written in unusual formats (e.g. slashes '/', parentheses '()', enumerations, or combined with commas).
+
+Return only valid JSON with the following structure and nothing else:
+
+{
+  "hard_skills": ["..."],
+  "soft_skills": ["..."]
+}
+
+==============================
+STRICT EXTRACTION RULES
+==============================
+
+1️⃣ HARD SKILLS
+Include only skills that represent a digital, technical, or methodological competency, explicitly mentioned in the text.
+Treat items separated by commas, slashes ('/'), semicolons, or parentheses as distinct skills (e.g., "skill_A/skill_B" → "skill_A", "skill_B").
+Only output the base_skill_name, not contextual words around it.
+
+Include items such as:
+- Programming or scripting languages
+- Frameworks, libraries, or SDKs
+- Databases or data tools
+- BI or analytics tools
+- Cloud platforms or DevOps tools
+- APIs, protocols, or data formats
+- Technical methodologies or management tools
+
+🚫 Exclude:
+- Education, diplomas or degrees (e.g. master in pharmacy)
+- Business domains (e.g. finance, logistics)
+- Generic conceptual terms (e.g. innovation, risk management)
+- Soft skills (e.g. communication, teamwork, adaptability)
+- Physical equipment skills
+
+If no valid hard skills are found, return "hard_skills": [].
+
+---
+
+2️⃣ SOFT SKILLS
+Include only interpersonal or cognitive abilities explicitly written in the job description.
+Examples (for understanding only): teamwork, communication, leadership, adaptability, collaboration, problem-solving, analytical thinking, stakeholder management.
+
+🚫 Exclude:
+- Tools, technologies, or technical competencies
+- Business domains or education terms
+
+If no valid soft skills are found, return "soft_skills": [].
+
+---
+
+==============================
+FORMAT REQUIREMENTS
+==============================
+
+- Output exactly one JSON object.
+- No text, explanations, or commentary before or after.
+- Hard and soft skills must not overlap.
+- Preserve the exact text casing of each extracted skill.
+
+==============================
+LINKEDIN JOB VACANCY
+==============================
+
+{job_description}
