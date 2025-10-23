@@ -24,7 +24,7 @@ EXTRACTION RULES
 - Choose from: ["English", "Dutch", "French", "German", "Spanish", "Italian", "unknown"].
 
 2. spoken_languages:
-- Extract ALL natural languages explicitly mentioned as job requirements.
+- Extract ALL natural languages explicitly mentioned as job requirements or "nice-to-haves".
 - Convert abbreviations (FR→French, NL→Dutch).
 - Translate to English.
 - If none, return ["unknown"].
