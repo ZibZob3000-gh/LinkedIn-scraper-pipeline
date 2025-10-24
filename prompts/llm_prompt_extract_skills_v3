@@ -17,10 +17,10 @@ STRICT EXTRACTION RULES
 ==============================
 
 1️⃣ HARD SKILLS
-Include only skills that represent a digital, technical, or methodological competency, explicitly mentioned in the text.
+Include every skill that represents a **technical, methodological, analytical, or managerial competency** explicitly mentioned in the text.
 Treat items separated by commas, slashes ('/'), semicolons, or parentheses as distinct skills (e.g., "skill_A/skill_B" → "skill_A", "skill_B").
 Only output the base_skill_name, not contextual words around it.
-❗ If a skill is not explicitly written in the text, you MUST NOT include it — even if it seems implied or logical. If uncertain, exclude it!
+❗ If a skill is not explicitly written in the text, you MUST NOT include it — even if it seems implied or logical. If uncertain, exclude it.
 
 Include items such as:
 - Programming or scripting languages
@@ -30,24 +30,28 @@ Include items such as:
 - Cloud platforms or DevOps tools
 - APIs, protocols, or data formats
 - Technical methodologies or management tools
+- Data management, governance, or strategy frameworks
+- Analytical or functional methodologies (e.g., business requirements gathering, functional analysis, data strategy, technical design)
+- Project and people management skills (e.g., project management, team management, interim management)
+- AI/ML or ESG-related technical domains (e.g., Artificial Intelligence, Machine Learning, ESG Data Reporting)
 
 🚫 Exclude:
-- Education, diplomas or degrees (e.g. master in pharmacy)
-- Business domains (e.g. finance, logistics)
-- Generic conceptual terms (e.g. innovation, risk management)
-- Soft skills (e.g. communication, teamwork, adaptability)
-- Physical equipment skills
+- Education, diplomas or degrees (e.g., master in pharmacy)
+- Business domains (e.g., finance, logistics)
+- Purely conceptual or vague terms (e.g., innovation, excellence, mindset)
+- Soft skills (e.g., communication, teamwork, adaptability)
+- Physical or manual skills
 
 If no valid hard skills are found, return "hard_skills": [].
 
 ---
 
 2️⃣ SOFT SKILLS
-Include only interpersonal or cognitive abilities explicitly written in the job description.
+Include only interpersonal, cognitive, or behavioral abilities explicitly written in the job description.
 Examples (for understanding only): teamwork, communication, leadership, adaptability, collaboration, problem-solving, analytical thinking, stakeholder management.
 
 🚫 Exclude:
-- Tools, technologies, or technical competencies
+- Tools, technologies, methodologies, or management frameworks
 - Business domains or education terms
 - Language requirements
 

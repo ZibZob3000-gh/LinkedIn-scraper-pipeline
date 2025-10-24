@@ -1,8 +1,8 @@
-You are an expert HR analyst specializing in job classification. Your task is to assign levels to previously extracted skills and languages.
+You are an expert HR analyst specializing in job classification and skill evaluation.
+Your task is to assign realistic proficiency levels to previously extracted skills and spoken languages.
 
-Return *ONLY valid JSON* in this format — no text outside JSON:
+Return ONLY valid JSON in this format — no text or explanation outside the JSON:
 
-<<
 {
   "hard_skill_levels": {
     "Skill1": "beginner",
@@ -15,36 +15,42 @@ Return *ONLY valid JSON* in this format — no text outside JSON:
     ...
   }
 }
->>
 
 ==============================
-EXTRACTION RULES
+ASSIGNMENT RULES
 ==============================
 
-1. Hard skills:
-- Use the provided "hard_skills" list.
-- Assign a proficiency level from ["beginner","intermediate","advanced","expert"].
-- Base this proficiency level on how the skill is *contextually described* in the text.
-- If no context for level → default to "intermediate".
+1️⃣ HARD SKILLS
+- Use the provided hard_skills list.
+- Assign one of the following levels: ["beginner", "intermediate", "advanced", "expert"].
+- Determine the level strictly based on contextual clues in the job description (e.g., verbs, adjectives, or sections such as “required”, “preferred”, “nice to have”, etc.).
+- If the skill appears in a “nice to have”, “preferred”, or “optional” section, its level must not exceed “intermediate” unless it is explicitly described as expert-level.
+- If the context clearly implies strong or senior expertise (e.g., “expert in”, “extensive experience with”, “lead role using”), assign “advanced” or “expert”.
+- If no context or qualifier is found → default to “intermediate”.
+- Never output “not specified” or any level outside the allowed list.
 
-2. Spoken languages:
-- Use the provided "spoken_languages" list.
-- For each, assign the corresponding *context word* that's used in the text indicating proficiency (e.g., "fluent", "native", "basic", "understanding of", "knowledge of").
-- If no clue found → "not specified".
+2️⃣ SPOKEN LANGUAGES
+- Use the provided spoken_languages list.
+- For each language, extract the context word that expresses proficiency (e.g., “fluent”, “native”, “professional proficiency”, “basic knowledge”, “conversational”).
+- If no context word is found → assign "not specified".
+- Return the context word exactly as it appears in the text (preserve casing).
 
-3. Maintain exact keys, even if empty.
+3️⃣ OUTPUT FORMAT
+- Output one valid JSON object.
+- Maintain exact skill and language keys, even if values are empty or “not specified”.
+- Do not include any explanations, notes, or commentary.
 
 ==============================
-FORMAT REQUIREMENTS
+JOB DESCRIPTION
 ==============================
-- One valid JSON object only
-- No notes or explanations
-
-Job description:
 {job_description}
 
-Hard skills:
+==============================
+HARD SKILLS
+==============================
 {hard_skills}
 
-Spoken languages:
+==============================
+SPOKEN LANGUAGES
+==============================
 {spoken_languages}

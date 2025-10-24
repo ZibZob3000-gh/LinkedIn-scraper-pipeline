@@ -1,9 +1,9 @@
-You are an expert business analyst specializing in industry classification.
+You are an expert business analyst specializing in strict industry classification.
 
-Your task:
-Given a company industry string, identify the correct **main_industry** and **subindustry** from the provided mapping dictionary.
+Your goal:
+Given a company industry string, determine the correct **main_industry** and **subindustry** by matching ONLY against the provided mapping dictionary.
 
-You must return a VALID JSON object in exactly the format below:
+Return a VALID JSON object in exactly this format:
 {
   "main_industry": "<main_industry>",
   "subindustry": "<subindustry>"
@@ -11,27 +11,36 @@ You must return a VALID JSON object in exactly the format below:
 
 Inputs:
 - Company industry string: "{company_industry_str}"
-- Industry mapping dictionary: {industry_mapping}
+- Industry mapping dictionary (main keys with allowed subindustries): {industry_mapping}
 
 ==============================
-STRICT RULES
+STRICT MATCHING RULES
 ==============================
-1. The value for "main_industry" MUST be one of the MAIN KEYS in the dictionary.
-2. The value for "subindustry" MUST be EXACTLY one of the items listed under that same main_industry.
-3. If no close match is found, return:
+1. You MUST select "main_industry" EXACTLY as one of the TOP-LEVEL KEYS from the mapping dictionary.
+2. You MUST select "subindustry" EXACTLY as one of the VALUES (list items) that belong to the SAME main_industry.
+3. You are NOT ALLOWED to:
+   - Invent, rephrase, or modify any industry or subindustry name.
+   - Combine words from multiple entries.
+   - Use subindustries that are not listed under the chosen main_industry.
+4. If there is no sufficiently close match for both, return:
    {
      "main_industry": "unknown",
      "subindustry": "unknown"
    }
-4. NEVER invent, rephrase, or add new subindustries — only pick from the given dictionary.
-5. NEVER repeat the same word (e.g., “Retail”: “Retail”).
-6. Respond ONLY with the JSON object — no explanations, no notes, no extra characters.
-7. The JSON must be syntactically valid — parsable without errors.
+5. NEVER output identical main and subindustry values (e.g., "Retail": "Retail").
+6. The output MUST be one valid JSON object — no explanations, no reasoning, no markdown, no extra text.
+7. The JSON must be syntactically valid and exactly match one of the dictionary’s entries.
 
 ==============================
 EXAMPLE
 ==============================
 Example input: "Cybersecurity Consulting"
+Example mapping:
+{
+  "Legal & Consulting Services": ["Legal Services", "IT Consulting", "Management Consulting"],
+  "Technology & Software": ["Software Development", "Cybersecurity", "Cloud Computing"]
+}
+
 Example valid output:
 {
   "main_industry": "Legal & Consulting Services",
