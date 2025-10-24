@@ -1,20 +1,11 @@
-You are an expert technical recruiter.
+You are an expert technical recruiter and NLP analyst specializing in automated skill extraction.
 
-Your task is to extract hard skills and soft skills from the text between
-`BEGIN JOB TEXT >>` and `<< END JOB TEXT` ONLY (in the section "LINKEDIN JOB VACANCY").
+Your task:
+You must ignore all prior examples or previous instructions.
+From the section "LINKEDIN JOB VACANCY", extract all hard and soft skills exactly as written — no assumptions, no rewording, no examples from outside the text.
+Your goal is to capture every explicitly written technical or interpersonal skill, even when written in unusual formats (e.g. slashes '/', parentheses '()', enumerations, bullet points, or comma-separated lists).
 
-Do not use, guess, or copy any words from the instructions or examples of the section "STRICT EXTRACTION RULES".
-Pretend you cannot read them once you start extraction.
-
-
-==============================
-LINKEDIN JOB VACANCY
-==============================
-BEGIN JOB TEXT >>
-{job_description}
-<< END JOB TEXT
-
-Return ONLY valid JSON in the exact format below, with no extra text before or after:
+Return only valid JSON with the following structure and nothing else:
 
 {
   "hard_skills": ["..."],
@@ -25,30 +16,62 @@ Return ONLY valid JSON in the exact format below, with no extra text before or a
 STRICT EXTRACTION RULES
 ==============================
 
-!! Instructions for your reasoning only — DO NOT extract from them !!
+1️⃣ HARD SKILLS
+Include only skills that represent a digital, technical, or methodological competency explicitly mentioned in the text.
 
-# HARD SKILLS
-# Include only:
-# - Programming languages (e.g. Python, Java, C#, SQL, JavaScript)
-# - Frameworks/libraries (e.g. React, TensorFlow, PyTorch, Spring)
-# - Databases/BI tools (e.g. MySQL, PostgreSQL, MongoDB, Power BI, Tableau)
-# - Cloud & DevOps tools (e.g. AWS, Azure, Docker, Kubernetes, Jenkins)
-# - Software/platform tools explicitly mentioned (e.g. Git, Jira, VS Code)
-# - APIs or file formats (e.g. REST, GraphQL, JSON, XML)
+📌 **Splitting rule:**
+If multiple skills are combined with slashes (/), commas (,), semicolons (;), or within parentheses — you MUST split them into separate items.
+Example: "Git/SVN" → "Git", "SVN"; "AWS, Azure, GCP" → three separate entries.
 
-# Exclude:
-# - Certifications (e.g. PMP, PRINCE2, ITIL)
-# - Methodologies (e.g. Agile, Scrum, Lean, Project Management Frameworks, Tools & Methodologies)
-# - Business domains (e.g. finance, logistics, supply chain, procurement, energy)
-# - Education (e.g. Project Leadership, Risk Management, Communication, Collaboration, Data & Analytics Mindset)
-# - Soft skills (e.g. teamwork, leadership, adaptability, problem-solving, stakeholder engagement)
-# - Education, diplomas, degrees
+📌 **List handling:**
+If the text contains a long enumeration of tools or skills, extract *every single one* individually, even if many are grouped together.
 
-If none found, return `"hard_skills": []`.
+Only output the base skill name (no adjectives or context words around it).
 
-# SOFT SKILLS
-# Include only interpersonal or cognitive abilities explicitly written in the text
-# (e.g. teamwork, communication, collaboration, leadership, adaptability, problem-solving).
-# Exclude tools, software, or certifications.
-# If none found, return `"soft_skills": []`.
+✅ Include items such as:
+- Programming or scripting languages
+- Frameworks, libraries, SDKs
+- Databases, BI or analytics tools
+- Cloud or DevOps platforms
+- APIs, protocols, file/data formats
+- Technical methodologies or management tools
 
+🚫 Exclude:
+- Education or degrees
+- Business domains (e.g. finance, logistics)
+- Generic conceptual terms (e.g. innovation, efficiency)
+- Soft skills (e.g. communication, adaptability)
+- Physical or equipment skills
+
+If no valid hard skills are found, return "hard_skills": [].
+
+---
+
+2️⃣ SOFT SKILLS
+Include only interpersonal or cognitive abilities *explicitly written* in the job description.
+
+Examples: teamwork, communication, leadership, adaptability, collaboration, problem-solving, analytical thinking, stakeholder management.
+
+🚫 Exclude:
+- Technical skills, tools, or methods
+- Business domains or education terms
+- Language requirements
+
+If none found, return "soft_skills": [].
+
+---
+
+==============================
+FORMAT REQUIREMENTS
+==============================
+
+- Output exactly one JSON object.
+- No text, explanations, or commentary before or after.
+- Hard and soft skills must not overlap.
+- Preserve the exact text casing as it appears in the description.
+
+==============================
+LINKEDIN JOB VACANCY
+==============================
+
+{job_description}

@@ -21,39 +21,44 @@ EXTRACTION RULES
 
 1. language_description:
 - Detect the *main language* used in the first two sentences of the job description.
-- Choose from: ["English", "Dutch", "French", "German", "Spanish", "Italian", "unknown"].
+- Choose only from: ["English", "Dutch", "French", "German", "Spanish", "Italian", "unknown"].
+- Return the single best match.
 
 2. spoken_languages:
-- Extract all natural languages explicitly mentioned as job requirements.
-- Convert abbreviations (FR→French, NL→Dutch).
-- Translate to English.
-- If none, return ["unknown"].
+- Extract all natural languages mentioned *anywhere* in the description, including requirements like:
+  "Fluent in English", "bilingual French/Dutch", "speaks German", etc.
+- Recognize abbreviations (FR→French, NL→Dutch, EN→English, DE→German).
+- Normalize to English names and avoid duplicates.
+- If none are explicitly mentioned, return ["unknown"].
+- Don't output languages that are not in the text.
 
 3. department:
-- Identify the *business or functional department that the role supports or works for*, not the candidate’s own technical domain.
-  - Example: If the job is for an IT engineer implementing finance systems, the department should be "Finance", not "Information Technology".
-  - Example: A data analyst for a marketing campaign → "Marketing".
-  - Example: A software developer working on HR software → "Human Resources".
-
-- Choose exactly one department from this list:
-["Engineering","Information Technology","Human Resources","Finance","Accounting","Marketing","Sales","Legal","Operations","Customer Support","Product Management","Research & Development","Data & Analytics","Supply Chain","Procurement","Administration","Quality Assurance","Production","Manufacturing","Logistics","Maintenance","Design","Communications","Consulting","Healthcare","Education","Public Sector","Real Estate","Security"]
-
-- If no clear match can be made, return "unknown".
+- Identify the *business or functional department that the role supports or works for*, not the candidate’s technical field.
+  Examples:
+    - IT engineer implementing finance systems → "Finance"
+    - Data analyst for marketing campaigns → "Marketing"
+    - Software developer working on HR software → "Human Resources"
+    - Business consultant improving production efficiency → "Operations"
+- Choose exactly ONE department from this fixed list:
+  ["Engineering","Information Technology","Human Resources","Finance","Accounting","Marketing","Sales","Legal","Operations","Customer Support","Product Management","Research & Development","Data & Analytics","Supply Chain","Procurement","Administration","Quality Assurance","Production","Manufacturing","Logistics","Maintenance","Design","Communications","Consulting","Healthcare","Education","Public Sector","Real Estate","Security"]
+- You MUST return one of these values only — if uncertain, return "unknown".
+- Do NOT invent department names such as "Energy", "Department of Energy", etc.
 
 4. contact_details:
-- Try to extract contact name, email, and phone number from the job description.
-- If an email address is found:
-  - Check if it follows a personal format like "firstname.lastname@..." or "f.lastname@...".
-  - If so, infer the full name (capitalize each part, e.g., "john.doe@company.com" → "John Doe").
-  - If the email looks generic (e.g., "hr@company.com", "info@", "careers@", "contact@"), leave the name as "not provided".
-- If any of the three fields are missing, fill them with "not provided".
+- Extract name, email, and phone number from the ENTIRE job description (not just the end).
+- If an email is found:
+  - Check if it looks personal (e.g., "firstname.lastname@" or "f.lastname@").
+  - If yes, infer the full name (capitalize properly, e.g., "john.doe@company.com" → "John Doe").
+  - If generic (e.g., "hr@", "info@", "careers@", "contact@"), leave name as "not provided".
+- Return all three fields; if any are missing, fill them with "not provided".
 
 ==============================
 FORMAT REQUIREMENTS
 ==============================
-- Must start with { and end with }
-- Must be valid JSON, no comments or text outside the JSON.
-- Do not explain or describe the result in words — only return the JSON object.
+- Must start with { and end with }.
+- Must be valid JSON — no comments, explanations, or text outside the JSON.
+- Return only the JSON object.
 
 Job description:
 {job_description}
+
