@@ -73,19 +73,25 @@ def map_skill_with_synonyms_verbose(
     all_synonyms: list,
     fuzzy_threshold: int = 95
 ) -> dict:
+    print(f"\n🧩 Mapping extracted skill: '{extracted_skill}'")
     s_norm = extracted_skill.strip().lower()
 
     if s_norm in synonym_to_skill:
         base_skill = synonym_to_skill[s_norm]
         skill_id = skill_lookup.get(base_skill.lower(), {}).get("ID")
+        print(f"✅ Exact match found → Base skill: '{base_skill}', ID: '{skill_id}'")
         return {"mapped_to": base_skill, "ID": skill_id}
 
     best = process.extractOne(s_norm, all_synonyms, scorer=fuzz.token_sort_ratio)
+    if best:
+        print(f"🔍 Fuzzy match candidate: '{best[0]}' (score={best[1]})")
     if best and best[1] >= fuzzy_threshold:
         base_skill = synonym_to_skill[best[0].lower()]
         skill_id = skill_lookup.get(base_skill.lower(), {}).get("ID")
+        print(f"✅ Fuzzy match accepted → Base skill: '{base_skill}', ID: '{skill_id}'")
         return {"mapped_to": base_skill, "ID": skill_id}
 
+    print(f"⚠️ No match found for '{extracted_skill}'")
     return {"mapped_to": None, "ID": None}
 
 
@@ -129,99 +135,61 @@ def call_llm(prompt: str, llm_config: dict) -> str:
 
 # ==== SKILL + LANGUAGE EXTRACTION (LLM Call 1) ====
 def extract_skills(description: str, llm_config: dict, prompts: dict) -> dict:
+    print("\n=== 🧠 LLM CALL 1: Extracting Skills ===")
+    print(f"Description preview:\n{description[:300]}...\n")
     prompt_template = prompts.get("prompt_1") or prompts.get("single_prompt", "")
     prompt = prompt_template.replace("{job_description}", description)
 
     try:
         output_text = call_llm(prompt, llm_config)
-        data = safe_json_parse(output_text)
+        print(f"🧾 Raw LLM Output:\n{output_text}\n")
 
-        return {
-            "hard_skills": data.get("hard_skills", []),
-            "soft_skills": data.get("soft_skills", [])
-        }
+        data = safe_json_parse(output_text)
+        hard_skills = data.get("hard_skills", [])
+        soft_skills = data.get("soft_skills", [])
+
+        print(f"✅ Extracted Hard Skills: {hard_skills}")
+        print(f"✅ Extracted Soft Skills: {soft_skills}\n")
+
+        return {"hard_skills": hard_skills, "soft_skills": soft_skills}
 
     except Exception as e:
         print(f"⚠️ extract_skills failed: {e}")
         return {"hard_skills": [], "soft_skills": []}
 
 
-# ==== LANGUAGE, DEPARTMENT, CONTACT (LLM Call 2) ====
-def extract_metadata(description: str, llm_config: dict, prompts: dict) -> dict:
-    prompt_template = prompts.get("prompt_2") or prompts.get("single_prompt", "")
-    prompt = prompt_template.replace("{job_description}", description)
-
-    try:
-        output_text = call_llm(prompt, llm_config)
-        data = safe_json_parse(output_text)
-
-        return {
-            "spoken_languages": data.get("spoken_languages", []),
-            "department": data.get("department", "null"),
-            "contact_details": data.get("contact_details", {
-                "name": "not provided",
-                "email": "not provided",
-                "phone_number": "not provided"
-            }),
-            "language_description": data.get("language_description", "not detected")
-        }
-
-    except Exception as e:
-        print(f"⚠️ extract_language_and_contact failed: {e}")
-        return {
-            "spoken_languages": [],
-            "department": "null",
-            "contact_details": {
-                "name": "not provided",
-                "email": "not provided",
-                "phone_number": "not provided"
-            },
-            "language_description": "not detected"
-        }
-
-
-# ==== SKILL & LANGUAGE LEVELS (LLM Call 3) ====
-def extract_skill_levels(hard_skills: list, spoken_languages: list, description: str, llm_config: dict, prompts: dict) -> dict:
-    prompt_template = prompts.get("prompt_3") or prompts.get("single_prompt", "")
-    hard_skills_str = ", ".join(hard_skills)
-    spoken_languages_str = ", ".join(spoken_languages)
-    prompt = prompt_template.replace("{job_description}", description)\
-                            .replace("{hard_skills}", hard_skills_str)\
-                            .replace("{spoken_languages}", spoken_languages_str)
-
-    try:
-        output_text = call_llm(prompt, llm_config)
-        data = safe_json_parse(output_text)
-
-        return {
-            "hard_skill_levels": data.get("hard_skill_levels", {}),
-            "spoken_languages_levels": data.get("spoken_languages_levels", {})
-        }
-
-    except Exception as e:
-        print(f"⚠️ estimate_skill_levels failed: {e}")
-        return {
-            "hard_skill_levels": {skill: "unknown" for skill in hard_skills},
-            "spoken_languages_levels": {lang: "unknown" for lang in spoken_languages}
-        }
-
-
 # ==== INDUSTRY MAPPING (LLM Call 4) ====
 def map_industry(company_industry_str: str, llm_config: dict, industry_mapping: dict, prompts: dict) -> dict:
+    print("\n=== 🏭 LLM CALL 4: Industry Mapping ===")
+    print(f"Company industry string: '{company_industry_str}'")
+
     if not company_industry_str.strip():
+        print("⚠️ Empty industry string — defaulting to 'unknown'")
         return {"main_industry": "unknown", "subindustry": "unknown"}
 
     prompt_template = prompts.get("prompt_4", "")
     industry_mapping_str = json.dumps(industry_mapping, indent=2)
-    prompt = prompt_template.replace("{company_industry_str}", company_industry_str)\
-                            .replace("{industry_mapping}", industry_mapping_str)
+    prompt = (
+        prompt_template
+        .replace("{company_industry_str}", company_industry_str)
+        .replace("{industry_mapping}", industry_mapping_str)
+    )
 
     try:
+        print("🚀 Sending industry mapping prompt to LLM...")
         output_text = call_llm(prompt, llm_config)
+        print(f"🧾 Raw LLM Output:\n{output_text}\n")
+
         data = safe_json_parse(output_text)
+
+        main_ind = data.get("main_industry", "unknown")
+        sub_ind = data.get("subindustry", "unknown")
+
+        print(f"✅ Industry Mapping Result → Main: '{main_ind}', Sub: '{sub_ind}'")
 
         # Validate keys
         if "main_industry" not in data or "subindustry" not in data:
+            print("⚠️ Missing keys in LLM response, defaulting to 'unknown'")
             return {"main_industry": "unknown", "subindustry": "unknown"}
 
         return data
