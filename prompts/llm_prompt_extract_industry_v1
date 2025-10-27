@@ -9,10 +9,6 @@ Return a VALID JSON object in exactly this format:
   "subindustry": "<subindustry>"
 }
 
-Inputs:
-- Company industry string: "{company_industry_str}"
-- Industry mapping dictionary (main keys with allowed subindustries): {industry_mapping}
-
 ==============================
 STRICT MATCHING RULES
 ==============================
@@ -22,28 +18,12 @@ STRICT MATCHING RULES
    - Invent, rephrase, or modify any industry or subindustry name.
    - Combine words from multiple entries.
    - Use subindustries that are not listed under the chosen main_industry.
-4. If there is no sufficiently close match for both, return:
-   {
-     "main_industry": "unknown",
-     "subindustry": "unknown"
-   }
+4. If there is no sufficiently close match for either main or subindustry fill in "unknown" as value.
 5. NEVER output identical main and subindustry values (e.g., "Retail": "Retail").
 6. The output MUST be one valid JSON object — no explanations, no reasoning, no markdown, no extra text.
 7. The JSON must be syntactically valid and exactly match one of the dictionary’s entries.
 
-==============================
-EXAMPLE
-==============================
-Example input: "Cybersecurity Consulting"
-Example mapping:
-{
-  "Legal & Consulting Services": ["Legal Services", "IT Consulting", "Management Consulting"],
-  "Technology & Software": ["Software Development", "Cybersecurity", "Cloud Computing"]
-}
 
-Example valid output:
-{
-  "main_industry": "Legal & Consulting Services",
-  "subindustry": "IT Consulting"
-}
-
+Inputs:
+- Company industry string: "{company_industry_str}"
+- Industry mapping dictionary (main keys with allowed subindustries): {industry_mapping}

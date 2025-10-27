@@ -22,8 +22,8 @@ ASSIGNMENT RULES
 
 1️⃣ HARD SKILLS
 - Use the provided hard_skills list.
-- Assign one of the following levels: ["beginner", "intermediate", "advanced", "expert"].
-- Determine the level strictly based on contextual clues in the job description (e.g., verbs, adjectives, or sections such as “required”, “preferred”, “nice to have”, etc.).
+- Assign exactly one of the following levels: ["beginner", "intermediate", "advanced", "expert"].
+- Determine the level strictly based on contextual clues in the job description.
 - If the skill appears in a “nice to have”, “preferred”, or “optional” section, its level must not exceed “intermediate” unless it is explicitly described as expert-level.
 - If the context clearly implies strong or senior expertise (e.g., “expert in”, “extensive experience with”, “lead role using”), assign “advanced” or “expert”.
 - If no context or qualifier is found → default to “intermediate”.

@@ -20,9 +20,9 @@ STRICT EXTRACTION RULES
 Include only skills that represent a digital, technical, or methodological competency explicitly mentioned in the text.
 
 📌 **Splitting rule:**
-If multiple skills are combined with slashes (/), commas (,), semicolons (;), or within parentheses — you MUST split them into separate items.
-Example1: "A/B" → "A", "B" → two separate entries.
-Example2: "C, D, E" → three separate entries.
+IF multiple skills are combined with slashes (/), commas (,), semicolons (;), or within parentheses — you MUST split them into separate items.
+Example1 (with '/'): "hard_skill_A/hard_skill_B" → "hard_skill_A", "hard_skill_B" → two separate entries.
+Example2 (with ','): "hard_skill_C, hard_skill_D, hard_skill_E" → three separate entries.
 
 📌 **List handling:**
 If the text contains a long enumeration of tools or skills, extract *every single one* individually, even if many are grouped together.

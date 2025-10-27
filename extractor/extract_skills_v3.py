@@ -248,7 +248,7 @@ def map_industry(company_industry_str: str, llm_config: dict, industry_mapping: 
         print(f"✅ Industry Mapping Result → Main: '{main_ind}', Sub: '{sub_ind}'")
 
         # Validate keys
-        if "main_industry" not in data or "subindustry" not in data:
+        if "main_industry" not in data and "subindustry" not in data:
             print("⚠️ Missing keys in LLM response, defaulting to 'unknown'")
             return {"main_industry": "unknown", "subindustry": "unknown"}
 
