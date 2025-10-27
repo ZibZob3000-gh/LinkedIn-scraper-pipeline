@@ -21,7 +21,8 @@ Include only skills that represent a digital, technical, or methodological compe
 
 📌 **Splitting rule:**
 If multiple skills are combined with slashes (/), commas (,), semicolons (;), or within parentheses — you MUST split them into separate items.
-Example: "Git/SVN" → "Git", "SVN"; "AWS, Azure, GCP" → three separate entries.
+Example1: "A/B" → "A", "B" → two separate entries.
+Example2: "C, D, E" → three separate entries.
 
 📌 **List handling:**
 If the text contains a long enumeration of tools or skills, extract *every single one* individually, even if many are grouped together.

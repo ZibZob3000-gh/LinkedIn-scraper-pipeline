@@ -158,6 +158,66 @@ def extract_skills(description: str, llm_config: dict, prompts: dict) -> dict:
         return {"hard_skills": [], "soft_skills": []}
 
 
+# ==== LANGUAGE, DEPARTMENT, CONTACT (LLM Call 2) ====
+def extract_metadata(description: str, llm_config: dict, prompts: dict) -> dict:
+    prompt_template = prompts.get("prompt_2") or prompts.get("single_prompt", "")
+    prompt = prompt_template.replace("{job_description}", description)
+
+    try:
+        output_text = call_llm(prompt, llm_config)
+        data = safe_json_parse(output_text)
+
+        return {
+            "spoken_languages": data.get("spoken_languages", []),
+            "department": data.get("department", "null"),
+            "contact_details": data.get("contact_details", {
+                "name": "not provided",
+                "email": "not provided",
+                "phone_number": "not provided"
+            }),
+            "language_description": data.get("language_description", "not detected")
+        }
+
+    except Exception as e:
+        print(f"⚠️ extract_language_and_contact failed: {e}")
+        return {
+            "spoken_languages": [],
+            "department": "null",
+            "contact_details": {
+                "name": "not provided",
+                "email": "not provided",
+                "phone_number": "not provided"
+            },
+            "language_description": "not detected"
+        }
+
+
+# ==== SKILL & LANGUAGE LEVELS (LLM Call 3) ====
+def extract_skill_levels(hard_skills: list, spoken_languages: list, description: str, llm_config: dict, prompts: dict) -> dict:
+    prompt_template = prompts.get("prompt_3") or prompts.get("single_prompt", "")
+    hard_skills_str = ", ".join(hard_skills)
+    spoken_languages_str = ", ".join(spoken_languages)
+    prompt = prompt_template.replace("{job_description}", description)\
+                            .replace("{hard_skills}", hard_skills_str)\
+                            .replace("{spoken_languages}", spoken_languages_str)
+
+    try:
+        output_text = call_llm(prompt, llm_config)
+        data = safe_json_parse(output_text)
+
+        return {
+            "hard_skill_levels": data.get("hard_skill_levels", {}),
+            "spoken_languages_levels": data.get("spoken_languages_levels", {})
+        }
+
+    except Exception as e:
+        print(f"⚠️ estimate_skill_levels failed: {e}")
+        return {
+            "hard_skill_levels": {skill: "unknown" for skill in hard_skills},
+            "spoken_languages_levels": {lang: "unknown" for lang in spoken_languages}
+        }
+
+
 # ==== INDUSTRY MAPPING (LLM Call 4) ====
 def map_industry(company_industry_str: str, llm_config: dict, industry_mapping: dict, prompts: dict) -> dict:
     print("\n=== 🏭 LLM CALL 4: Industry Mapping ===")

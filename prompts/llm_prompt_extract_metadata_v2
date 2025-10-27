@@ -49,8 +49,8 @@ EXTRACTION RULES
 - If an email is found:
   - Check if it looks personal (e.g., "firstname.lastname@" or "f.lastname@").
   - If yes, infer the full name (capitalize properly, e.g., "john.doe@company.com" → "John Doe").
-  - If generic (e.g., "hr@", "info@", "careers@", "contact@"), leave name as "not provided".
-- Return all three fields; if any are missing, fill them with "not provided".
+  - If generic (e.g., "hr@", "info@", "careers@", "contact@"), insert that email and leave name as "not provided".
+- Return all three fields; if any are missing, fill the missing ones with "not provided".
 
 ==============================
 FORMAT REQUIREMENTS
