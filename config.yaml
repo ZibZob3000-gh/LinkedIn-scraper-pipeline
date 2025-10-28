@@ -25,7 +25,6 @@ prompts:
   prompt_2: "llm_prompt_extract_metadata_v2"
   prompt_3: "llm_prompt_extract_levels_v1"
   prompt_4: "llm_prompt_extract_industry_v1"
-  single_prompt: "llm_prompt_v1"
 
 skills:
   taxonomy_file: "skill_to_info.json"
@@ -42,5 +41,5 @@ extractors:
 processing:
   max_jobs: 30
   date_filter: null  # overwrites date_range, standard: null, defaults to today if no filter/range is given
-  date_range: ["2025-10-10", "2025-10-12"] # standard: null, example: ["2025-10-20", "2025-10-22"]
+  date_range: ["2025-10-13", "2025-10-15"] # standard: null, example: ["2025-10-20", "2025-10-22"]
 
