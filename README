@@ -20,11 +20,15 @@ Before running the pipeline, the following must be installed and set up on your 
 ## Step-by-Step Instructions
 
 ### 1. Install Ollama CLI
-Open a terminal and run:
+Linux/macOS:
+    curl -sSL https://ollama.com/download/ollama-cli-linux -o /usr/local/bin/ollama
+    chmod +x /usr/local/bin/ollama
 
-	```bash
-	curl -sSL https://ollama.com/download/ollama-cli-linux -o /usr/local/bin/ollama
-	chmod +x /usr/local/bin/ollama
+MacOS (Homebrew):
+    brew install ollama
+
+Windows:
+    Download and run the installer: https://ollama.com/download
 
 ### 2. Download the AI model
 Run the following command to download the required model: 
