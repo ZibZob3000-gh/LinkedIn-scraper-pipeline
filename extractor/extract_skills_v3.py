@@ -8,11 +8,25 @@ from rapidfuzz import process, fuzz
 
 # ==== TEXT CLEANUP HELPER ====
 def clean_job_description(text: str) -> str:
+    # normalize line endings
     text = text.replace('\t', ' ').replace('\r\n', '\n').replace('\r', '\n')
-    text = re.sub(r'\n\s*\n+', '\n\n', text)
-    text = '\n'.join(line.strip() for line in text.splitlines())
-    text = re.sub(r' {2,}', ' ', text)
-    return text.strip()
+
+    # remove trailing spaces on each line, but keep empty lines
+    lines = [line.rstrip() for line in text.splitlines()]
+
+    # collapse multiple empty lines to a single empty line
+    cleaned_lines = []
+    previous_empty = False
+    for line in lines:
+        if line.strip() == '':
+            if not previous_empty:
+                cleaned_lines.append('')
+            previous_empty = True
+        else:
+            cleaned_lines.append(line)
+            previous_empty = False
+
+    return '\n'.join(cleaned_lines).strip()
 
 
 # ==== SAFE JSON PARSER (UNIFIED) ====

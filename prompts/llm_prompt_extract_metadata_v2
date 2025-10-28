@@ -27,7 +27,7 @@ EXTRACTION RULES
 2. spoken_languages:
 - Extract all natural languages mentioned *anywhere* in the description, including requirements like:
   "Fluent in English", "bilingual French/Dutch", "speaks German", etc.
-- Recognize abbreviations (FR→French, NL→Dutch, EN→English, DE→German).
+- Recognize and replace abbreviations (FR→French, NL→Dutch, EN→English, DE→German).
 - Normalize to English names and avoid duplicates.
 - If none are explicitly mentioned, return ["unknown"].
 - Don't output languages that are not in the text.

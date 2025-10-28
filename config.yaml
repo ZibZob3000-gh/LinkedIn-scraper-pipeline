@@ -21,7 +21,7 @@ llm:
   temperature: 0
 
 prompts:
-  prompt_1: "llm_prompt_extract_skills_v3"
+  prompt_1: "llm_prompt_extract_skills_v3"    #v4 is still in development so keep this on v3
   prompt_2: "llm_prompt_extract_metadata_v2"
   prompt_3: "llm_prompt_extract_levels_v1"
   prompt_4: "llm_prompt_extract_industry_v1"
@@ -39,7 +39,7 @@ extractors:
   skills_extractor: "extract_skills_v3.py"
 
 processing:
-  max_jobs: 30
+  max_jobs: null # default: null, example: 20. 
   date_filter: null  # overwrites date_range, standard: null, defaults to today if no filter/range is given
-  date_range: ["2025-10-13", "2025-10-15"] # standard: null, example: ["2025-10-20", "2025-10-22"]
+  date_range: null # standard: null, example: ["2025-10-20", "2025-10-22"]
 
