@@ -1,0 +1,55 @@
+# Skill Extractor ETL Pipeline setup via docker image
+
+This project contains an ETL (Extract-Transform-Load) pipeline for extracting skills from LinkedIn data. The pipeline uses a local AI model (Ollama) to analyze the data.
+
+---
+
+## Important Prerequisites
+
+Before running the pipeline, the following must be installed and set up on your system:
+
+1. **Docker**  
+   Make sure Docker is installed and running:  
+   [https://www.docker.com/get-started](https://www.docker.com/get-started)
+
+2. **Ollama CLI**  
+   The AI model relies on Ollama. You need to install the Ollama CLI and download the model.  
+
+---
+
+## Step-by-Step Instructions
+
+### 1. Install Ollama CLI
+Open a terminal and run:
+
+	```bash
+	curl -sSL https://ollama.com/download/ollama-cli-linux -o /usr/local/bin/ollama
+	chmod +x /usr/local/bin/ollama
+
+### 2. Download the AI model
+Run the following command to download the required model: 
+
+	ollama pull llama3:8b-instruct-q4_K_M
+
+### 3. Start the Ollama Server
+Start the server so the pipeline can use the model:
+
+	ollama serve &
+
+### 4. Run the ETL Pipeline Docker Container
+
+	docker run -it -v /path/to/local/project:/app skill-extractor:latest
+
+Replace /path/to/local/project with the full path to the folder containing the project files.
+
+The container will handle all Python dependencies and run the pipeline.
+Make sure the Ollama server (step 3) is still running.
+
+
+
+
+Notes
+
+- The pipeline assumes the AI model is already downloaded. Do not skip steps 2 and 3.
+- You do not need to install Python or any other dependencies; the container handles everything.
+- If you restart your computer, you may need to start the Ollama server again (step 3).

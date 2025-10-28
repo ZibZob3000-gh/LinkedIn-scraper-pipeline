@@ -1,23 +1,25 @@
-# Start from the official Ollama image (includes the runtime)
-FROM ollama/ollama:latest
+FROM python:3.11-slim
 
-# Install Python (since Ollama base image is Ubuntu-based)
-RUN apt-get update && apt-get install -y python3 python3-pip
+# Install system dependencies needed to build Python packages
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    libpq-dev \
+    curl \
+    build-essential \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Set working directory inside the container
 WORKDIR /app
 
-# Copy your project files into the container
+# Copy project files
 COPY . /app
 
 # Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
-# Preload your specific model
-RUN ollama pull llama3:8b-instruct-q4_K_M
+# Expose port if needed
+EXPOSE 8000
 
-# Expose Ollama’s default API port
-EXPOSE 11434
-
-# Start Ollama in the background, wait for it, then run your Python script
-CMD ollama serve & sleep 5 && python main.py
+# Run main script
+CMD ["python", "main.py"]
