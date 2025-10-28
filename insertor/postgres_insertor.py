@@ -3,6 +3,7 @@ import psycopg2
 from psycopg2 import sql
 import json
 
+
 class PostgresInsertor:
     def __init__(self, host, dbname, user, password, port=5433):
         self.conn_params = {
