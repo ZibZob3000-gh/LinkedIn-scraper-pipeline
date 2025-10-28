@@ -21,7 +21,7 @@ llm:
   temperature: 0
 
 prompts:
-  prompt_1: "llm_prompt_extract_skills_v4"
+  prompt_1: "llm_prompt_extract_skills_v3"
   prompt_2: "llm_prompt_extract_metadata_v2"
   prompt_3: "llm_prompt_extract_levels_v1"
   prompt_4: "llm_prompt_extract_industry_v1"
@@ -30,7 +30,7 @@ prompts:
 skills:
   taxonomy_file: "skill_to_info.json"
   synonyms_file: "skill_synonyms.json"
-  fuzzy_threshold: 95
+  fuzzy_threshold: 90
 
 files:
   descriptions: "Descriptions.json"

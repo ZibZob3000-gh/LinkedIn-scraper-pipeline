@@ -36,12 +36,13 @@ Only output the base skill name (no adjectives or context words around it).
 - Cloud or DevOps platforms
 - APIs, protocols, file/data formats
 - Technical methodologies or management tools
+⚠️ Be extremely exhaustive for these ones when extracting from the job vacancy.
+
+✅ Also include items such as:
 - Data management, governance, or strategy frameworks
 - Analytical or functional methodologies (e.g., business requirements gathering, functional analysis, data strategy, technical design)
 - Project and people management skills (e.g., project management, team management, interim management)
 - AI/ML or ESG-related technical domains (e.g., Artificial Intelligence, Machine Learning, ESG Data Reporting)
-⚠️ Do **not** omit concrete tools or platforms when they appear — always include both tools **and** conceptual skills.
-⚠️ Be exhaustive when extracting from the job vacancy.
 
 🚫 Exclude:
 - Education or degrees
