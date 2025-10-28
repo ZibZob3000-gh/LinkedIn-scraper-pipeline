@@ -39,15 +39,12 @@ class PostgresIngestor:
             start_date, end_date = date_range
             where_clause = "WHERE ingested_at::date BETWEEN %s AND %s"
             params = (start_date, end_date)
-            mode = f"date range ({start_date} → {end_date})"
 
         else:
             today = date.today().isoformat()
             where_clause = "WHERE ingested_at::date = %s"
             params = (today,)
             mode = f"defaulted to today ({today})"
-
-        print(f"[INFO] Fetching job data using {mode}")
 
         # ========================
         # Build and execute query

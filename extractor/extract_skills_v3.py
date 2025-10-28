@@ -73,25 +73,19 @@ def map_skill_with_synonyms_verbose(
     all_synonyms: list,
     fuzzy_threshold: int = 95
 ) -> dict:
-    print(f"\n🧩 Mapping extracted skill: '{extracted_skill}'")
     s_norm = extracted_skill.strip().lower()
 
     if s_norm in synonym_to_skill:
         base_skill = synonym_to_skill[s_norm]
         skill_id = skill_lookup.get(base_skill.lower(), {}).get("ID")
-        print(f"✅ Exact match found → Base skill: '{base_skill}', ID: '{skill_id}'")
         return {"mapped_to": base_skill, "ID": skill_id}
 
     best = process.extractOne(s_norm, all_synonyms, scorer=fuzz.token_sort_ratio)
-    if best:
-        print(f"🔍 Fuzzy match candidate: '{best[0]}' (score={best[1]})")
     if best and best[1] >= fuzzy_threshold:
         base_skill = synonym_to_skill[best[0].lower()]
         skill_id = skill_lookup.get(base_skill.lower(), {}).get("ID")
-        print(f"✅ Fuzzy match accepted → Base skill: '{base_skill}', ID: '{skill_id}'")
         return {"mapped_to": base_skill, "ID": skill_id}
 
-    print(f"⚠️ No match found for '{extracted_skill}'")
     return {"mapped_to": None, "ID": None}
 
 
@@ -135,21 +129,15 @@ def call_llm(prompt: str, llm_config: dict) -> str:
 
 # ==== SKILL + LANGUAGE EXTRACTION (LLM Call 1) ====
 def extract_skills(description: str, llm_config: dict, prompts: dict) -> dict:
-    print("\n=== 🧠 LLM CALL 1: Extracting Skills ===")
-    print(f"Description preview:\n{description[:300]}...\n")
     prompt_template = prompts.get("prompt_1") or prompts.get("single_prompt", "")
     prompt = prompt_template.replace("{job_description}", description)
 
     try:
         output_text = call_llm(prompt, llm_config)
-        print(f"🧾 Raw LLM Output:\n{output_text}\n")
 
         data = safe_json_parse(output_text)
         hard_skills = data.get("hard_skills", [])
         soft_skills = data.get("soft_skills", [])
-
-        print(f"✅ Extracted Hard Skills: {hard_skills}")
-        print(f"✅ Extracted Soft Skills: {soft_skills}\n")
 
         return {"hard_skills": hard_skills, "soft_skills": soft_skills}
 
@@ -220,11 +208,8 @@ def extract_skill_levels(hard_skills: list, spoken_languages: list, description:
 
 # ==== INDUSTRY MAPPING (LLM Call 4) ====
 def map_industry(company_industry_str: str, llm_config: dict, industry_mapping: dict, prompts: dict) -> dict:
-    print("\n=== 🏭 LLM CALL 4: Industry Mapping ===")
-    print(f"Company industry string: '{company_industry_str}'")
 
     if not company_industry_str.strip():
-        print("⚠️ Empty industry string — defaulting to 'unknown'")
         return {"main_industry": "unknown", "subindustry": "unknown"}
 
     prompt_template = prompts.get("prompt_4", "")
@@ -236,16 +221,8 @@ def map_industry(company_industry_str: str, llm_config: dict, industry_mapping: 
     )
 
     try:
-        print("🚀 Sending industry mapping prompt to LLM...")
         output_text = call_llm(prompt, llm_config)
-        print(f"🧾 Raw LLM Output:\n{output_text}\n")
-
         data = safe_json_parse(output_text)
-
-        main_ind = data.get("main_industry", "unknown")
-        sub_ind = data.get("subindustry", "unknown")
-
-        print(f"✅ Industry Mapping Result → Main: '{main_ind}', Sub: '{sub_ind}'")
 
         # Validate keys
         if "main_industry" not in data and "subindustry" not in data:
