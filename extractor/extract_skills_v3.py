@@ -9,7 +9,7 @@ from rapidfuzz import process, fuzz
 # ==== TEXT CLEANUP HELPER ====
 def clean_job_description(text: str) -> str:
     text = text.replace('\t', ' ').replace('\r\n', '\n').replace('\r', '\n')
-    text = text.replace('\\-', '-')  # Fix invalid escape sequences
+    text = text.replace('\\-', '-')
 
     lines = [line.rstrip() for line in text.splitlines()]
 
