@@ -1,0 +1,102 @@
+# 💻 Skill Extractor ETL Pipeline – Docker Setup
+
+This project provides an **ETL (Extract–Transform–Load) pipeline** that extracts and analyzes skills from LinkedIn data using a **local AI model** (via Ollama).
+All dependencies are packaged inside a Docker image for easy setup.
+
+---
+
+## ⚙️ What You’ll Need
+
+Before running the pipeline, please make sure you have:
+
+1. **Docker**
+   Install and make sure it’s running:
+   👉 [https://www.docker.com/get-started](https://www.docker.com/get-started)
+
+2. **Ollama**
+   Ollama runs the AI model locally on your computer.
+   Install it and download the model before running the Docker container.
+
+---
+
+## 🪜 Step-by-Step Setup
+
+### 1. Install Ollama
+
+**Windows:**
+Download and install from:
+👉 [https://ollama.com/download](https://ollama.com/download)
+
+**macOS (via Homebrew):**
+```bash
+brew install ollama
+```
+
+**Linux:**
+```bash
+curl -sSL https://ollama.com/download/ollama-cli-linux -o /usr/local/bin/ollama
+chmod +x /usr/local/bin/ollama
+```
+
+---
+
+### 2. Download the AI Model
+
+Once Ollama is installed, open a terminal (PowerShell, CMD, or Linux shell) and run:
+```bash
+ollama pull llama3:8b-instruct-q4_K_M
+```
+
+This downloads the required model to your system.
+(You only need to do this once.)
+
+---
+
+### 3. Start the Ollama Server
+
+Before running the container, start the Ollama background server:
+```bash
+ollama serve &
+```
+
+Keep this running in the background — the ETL pipeline will connect to it automatically.
+
+---
+
+### 4. Run the ETL Pipeline Docker Container
+
+Use the following command:
+```bash
+docker run -it -v /path/to/local/project:/app skill-extractor:latest
+```
+
+Replace `/path/to/local/project` with the **full path** to your project folder.
+
+💡 **Tip:** If you’re unsure of your path, you can drag the folder into your terminal after typing `-v ` to insert the correct location.
+
+---
+
+## 📝 Notes
+
+- The pipeline assumes the AI model is **already downloaded and running** (steps 2 and 3).
+- You do **not** need Python or any additional packages — everything runs inside the container.
+- If you restart your computer, please start the Ollama server again using step 3.
+- To verify Ollama is running, you can open a terminal and run:
+  ```bash
+  ollama list
+  ```
+  You should see your downloaded model listed there.
+
+---
+
+## ✅ Summary
+
+1. Install Docker
+2. Install Ollama
+3. Run `ollama pull llama3:8b-instruct-q4_K_M`
+4. Start Ollama with `ollama serve &`
+5. Run the Docker container
+
+After these steps, the pipeline will be ready to process data automatically.
+
+---

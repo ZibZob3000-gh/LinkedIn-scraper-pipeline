@@ -1,59 +1,58 @@
-# Skill Extractor ETL Pipeline setup via docker image
+# 🧠 Skill Extractor ETL Pipeline
 
-This project contains an ETL (Extract-Transform-Load) pipeline for extracting skills from LinkedIn data. The pipeline uses a local AI model (Ollama) to analyze the data.
+This repository contains the **Skill Extractor ETL pipeline**, which processes LinkedIn data to identify and extract professional skills using a local AI model.
 
----
+The pipeline can be set up in **two ways**:
 
-## Important Prerequisites
-
-Before running the pipeline, the following must be installed and set up on your system:
-
-1. **Docker**  
-   Make sure Docker is installed and running:  
-   [https://www.docker.com/get-started](https://www.docker.com/get-started)
-
-2. **Ollama CLI**  
-   The AI model relies on Ollama. You need to install the Ollama CLI and download the model.  
+1. 🐳 **Docker Setup** – Easiest way to run the pipeline (recommended for production).
+2. 💻 **Local Setup (via GitHub)** – For direct code access and development environments.
 
 ---
 
-## Step-by-Step Instructions
+## ⚙️ Requirements
 
-### 1. Install Ollama CLI
-Linux/macOS:
-    curl -sSL https://ollama.com/download/ollama-cli-linux -o /usr/local/bin/ollama
-    chmod +x /usr/local/bin/ollama
+- **Ollama** (for the local AI model)
+  👉 [https://ollama.com/download](https://ollama.com/download)
+- **Llama 3 model**
+  After installing Ollama, download the model:
+  ```bash
+  ollama pull llama3:8b-instruct-q4_K_M
+  ```
 
-MacOS (Homebrew):
-    brew install ollama
+---
 
-Windows:
-    Download and run the installer: https://ollama.com/download
+## 🚀 Setup Options
 
-### 2. Download the AI model
-Run the following command to download the required model: 
+### Option 1: Docker Setup (Recommended)
+If you prefer a fully self-contained environment, follow:
+👉 [README_DOCKER.md](./README_DOCKER.md)
 
-	ollama pull llama3:8b-instruct-q4_K_M
+This option runs everything inside a container — no need to install Python or dependencies manually.
 
-### 3. Start the Ollama Server
-Start the server so the pipeline can use the model:
+---
 
-	ollama serve &
+### Option 2: Local (GitHub) Setup
+If you want to run the code directly from this repository, follow:
+👉 [README_LOCAL.md](./README_LOCAL.md)
 
-### 4. Run the ETL Pipeline Docker Container
+Make sure Ollama and the required model are installed locally before running the scripts.
 
-	docker run -it -v /path/to/local/project:/app skill-extractor:latest
+---
 
-Replace /path/to/local/project with the full path to the folder containing the project files.
+## 🧩 Quick Summary
 
-The container will handle all Python dependencies and run the pipeline.
-Make sure the Ollama server (step 3) is still running.
+| Setup Type | When to Use | Requirements |
+|-------------|--------------|---------------|
+| **Docker** | You want the standard setup and an isolated environment | Only Docker + Ollama |
+| **Local (GitHub)** | You want to view or modify the Python code | Python + Ollama |
 
+---
 
+## 📞 Support
 
+If you encounter any issues, please make sure the Ollama server is running before executing the pipeline:
+```bash
+ollama serve &
+```
 
-Notes
-
-- The pipeline assumes the AI model is already downloaded. Do not skip steps 2 and 3.
-- You do not need to install Python or any other dependencies; the container handles everything.
-- If you restart your computer, you may need to start the Ollama server again (step 3).
+For further assistance, contact: **Thibaud Vandendooren**
