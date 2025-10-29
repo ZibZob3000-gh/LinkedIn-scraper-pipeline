@@ -8,13 +8,11 @@ from rapidfuzz import process, fuzz
 
 # ==== TEXT CLEANUP HELPER ====
 def clean_job_description(text: str) -> str:
-    # normalize line endings
     text = text.replace('\t', ' ').replace('\r\n', '\n').replace('\r', '\n')
+    text = text.replace('\\-', '-')  # Fix invalid escape sequences
 
-    # remove trailing spaces on each line, but keep empty lines
     lines = [line.rstrip() for line in text.splitlines()]
 
-    # collapse multiple empty lines to a single empty line
     cleaned_lines = []
     previous_empty = False
     for line in lines:
