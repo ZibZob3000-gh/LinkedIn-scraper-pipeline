@@ -2,7 +2,7 @@ import yaml
 import json
 import os
 from importlib import import_module
-from ingestor.postgres_ingestor import PostgresIngestor
+from ingestor.historical_data_ingestor import PostgresIngestor
 from insertor.postgres_insertor import PostgresInsertor
 from extractor.job_extractor import JobExtractor
 
