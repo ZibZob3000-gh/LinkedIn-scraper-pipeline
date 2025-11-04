@@ -36,7 +36,10 @@ Only output the base skill name (no adjectives or context words around it).
 - Cloud or DevOps platforms
 - APIs, protocols, file/data formats
 - Technical methodologies or management tools
-Also include explicitly mentioned items in these domains if present in the job description: data management/governance/strategy frameworks, analytical or functional methodologies, project/people management, AI/ML or ESG-related technical domains.
+- Data management, governance, or strategy frameworks
+- Analytical or functional methodologies
+- Project and people management skills
+- AI/ML or ESG-related technical domains
 
 🚫 Exclude:
 - Education or degrees

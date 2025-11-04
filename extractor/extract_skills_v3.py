@@ -1,9 +1,10 @@
 import json
-import requests
+from mistralai import Mistral
 import time
 import re
 import ast
 from rapidfuzz import process, fuzz
+import random
 
 
 # ==== TEXT CLEANUP HELPER ====
@@ -103,40 +104,39 @@ def map_skill_with_synonyms_verbose(
 
 # ==== LOCAL LLM CALL ====
 def call_llm(prompt: str, llm_config: dict) -> str:
-    model_name = llm_config.get("model_name", "mistral:instruct")
-    max_retries = llm_config.get("max_retries", 1)
+    """
+    Calls Mistral's hosted API model (via La Plateforme) using a robust
+    exponential backoff with jitter for handling 429 / capacity errors.
+    All parameters are configurable via llm_config.
+    """
+    api_key = llm_config.get("api_key")
+    model_name = llm_config.get("model_name", "mistral-small-latest")
+    max_retries = llm_config.get("max_retries", 5)
+    base_delay = llm_config.get("base_delay", 1)     # starting wait in seconds
+    max_delay = llm_config.get("max_delay", 30)      # max wait in seconds
+    jitter = llm_config.get("jitter", 1)             # random jitter to spread retries
+
+    client = Mistral(api_key=api_key)
 
     for attempt in range(1, max_retries + 1):
         try:
-            response = requests.post(
-                "http://localhost:11434/api/generate",
-                json={"model": model_name, "prompt": prompt},
-                stream=True,
-                timeout=60
+            response = client.chat.complete(
+                model=model_name,
+                messages=[{"role": "user", "content": prompt}]
             )
 
-            if response.status_code != 200:
-                time.sleep(1)
-                continue
-
-            full_output = ""
-            for chunk in response.iter_lines():
-                if chunk:
-                    decoded = chunk.decode("utf-8")
-                    try:
-                        json_chunk = json.loads(decoded)
-                        full_output += json_chunk.get("response", "")
-                    except json.JSONDecodeError:
-                        full_output += decoded
-
-            if full_output.strip():
-                return full_output
+            # Check if response exists and has choices
+            if response and response.choices:
+                return response.choices[0].message.content.strip()
 
         except Exception as e:
-            print(f"⚠️ Attempt {attempt} failed: {e}")
-            time.sleep(1)
+            # Calculate exponential backoff with jitter
+            delay = min(base_delay * 2 ** (attempt - 1), max_delay)
+            delay += random.uniform(0, jitter)
+            print(f"⚠️ Attempt {attempt} failed: {e}. Retrying in {delay:.1f}s...")
+            time.sleep(delay)
 
-    raise RuntimeError(f"❌ LLM call failed after {max_retries} attempts. Check that the model '{model_name}' is installed and running.")
+    raise RuntimeError(f"❌ Mistral API call failed after {max_retries} attempts. Check your key or network.")
 
 
 # ==== SKILL + LANGUAGE EXTRACTION (LLM Call 1) ====

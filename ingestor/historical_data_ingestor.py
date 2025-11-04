@@ -19,7 +19,7 @@ class PostgresIngestor:
         columns: list[str] | None = None,
         date_filter: str | None = None,
         date_range: tuple[str, str] | None = None,
-        id_threshold: str | None = "li-4145969726"
+        id_threshold: str | None = "li-4333923436"
     ):
         """
         Fetch job postings, optionally filtering by ingested_at date or range,

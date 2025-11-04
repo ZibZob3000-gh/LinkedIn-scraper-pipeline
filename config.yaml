@@ -16,9 +16,13 @@ paths:
   prompts: "prompts"
 
 llm:
-  model_name: "llama3:8b-instruct-q4_K_M"
-  max_retries: 2
+  model_name: "mistral-small-latest"   # change from local llama model
+  max_retries: 5
   temperature: 0
+  api_key: "R3LknG8IubssRbkGJvoB4JviVzYa3uxM"
+  base_delay: 1
+  max_delay: 30
+  jitter: 1
 
 prompts:
   prompt_1: "llm_prompt_extract_skills_v3"    #v4 is still in development so keep this on v3
@@ -39,7 +43,7 @@ extractors:
   skills_extractor: "extract_skills_v3.py"
 
 processing:
-  max_jobs: null # default: null, example: 20. 
+  max_jobs: 600 # default: null, example: 20.
   date_filter: null  # overwrites date_range, standard: null, defaults to today if no filter/range is given
-  date_range: ["2025-04-01", "2025-10-29"] # standard: null, example: ["2025-10-20", "2025-10-22"]
+  date_range: null # standard: null, example: ["2025-10-20", "2025-10-22"]
 
