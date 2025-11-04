@@ -17,7 +17,7 @@ paths:
 
 llm:
   model_name: "mistral-small-latest"   # change from local llama model
-  max_retries: 5
+  max_retries: 10
   temperature: 0
   api_key: "R3LknG8IubssRbkGJvoB4JviVzYa3uxM"
   base_delay: 1
