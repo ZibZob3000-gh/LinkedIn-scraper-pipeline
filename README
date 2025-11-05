@@ -1,58 +1,161 @@
 # 🧠 Skill Extractor ETL Pipeline
 
-This repository contains the **Skill Extractor ETL pipeline**, which processes LinkedIn data to identify and extract professional skills using a local AI model.
+This repository contains the **Skill Extractor ETL Pipeline**, which processes LinkedIn job data to extract and enrich professional skills using the **Mistral hosted AI API** (no local model required).
 
-The pipeline can be set up in **two ways**:
-
-1. 🐳 **Docker Setup** – Easiest way to run the pipeline (recommended for production).
-2. 💻 **Local Setup (via GitHub)** – For direct code access and development environments.
-
----
-
-## ⚙️ Requirements
-
-- **Ollama** (for the local AI model)
-  👉 [https://ollama.com/download](https://ollama.com/download)
-- **Llama 3 model**
-  After installing Ollama, download the model:
-  ```bash
-  ollama pull llama3:8b-instruct-q4_K_M
-  ```
+You can run the pipeline in **two ways**:
+1. 🐳 **Docker Setup** – Recommended for production or easy deployment.
+2. 💻 **Local Setup** – For direct code access, debugging, or customization.
 
 ---
 
-## 🚀 Setup Options
+## ⚙️ Overview
 
-### Option 1: Docker Setup (Recommended)
-If you prefer a fully self-contained environment, follow:
-👉 [README_DOCKER.md](./README_DOCKER.md)
-
-This option runs everything inside a container — no need to install Python or dependencies manually.
-
----
-
-### Option 2: Local (GitHub) Setup
-If you want to run the code directly from this repository, follow:
-👉 [README_LOCAL.md](./README_LOCAL.md)
-
-Make sure Ollama and the required model are installed locally before running the scripts.
+The ETL pipeline performs:
+- **Extraction** of job postings from a PostgreSQL database.
+- **Transformation** using an AI model (via Mistral API).
+- **Loading** of enriched job records back into the database.
 
 ---
 
-## 🧩 Quick Summary
+## 🪜 Setup Options
+
+### 🐳 Option 1: Docker Setup (Recommended)
+
+Run everything inside a lightweight container — no need to install Python or dependencies manually.
+
+#### 1️⃣ Prerequisites
+- [Install Docker](https://www.docker.com/get-started)
+- Ensure Docker is running on your machine
+
+#### 2️⃣ Build the image
+If you’re building locally:
+```bash
+docker build -t skill-extractor:latest .
+```
+
+Or, if you already have a `.tar` image archive:
+```bash
+docker load -i skill-extractor.tar
+```
+
+#### 3️⃣ Run the container
+```bash
+docker run -it --env-file .env -v /path/to/local/project:/app skill-extractor:latest
+```
+Replace `/path/to/local/project` with your actual project folder path.
+
+💡 **Tip:** The `.env` file should contain your Mistral API key, e.g.:
+```
+MISTRAL_API_KEY=sk-xxxxxx
+```
+
+---
+
+### 💻 Option 2: Local Setup (Development Mode)
+
+Run the code directly from your local environment — ideal for modifying logic or testing.
+
+#### 1️⃣ Prerequisites
+- **Python 3.10+**
+- **pip** (comes with Python)
+- **PostgreSQL** (for data storage)
+- **Mistral API Key** (get one at [https://mistral.ai](https://mistral.ai))
+
+#### 2️⃣ Install dependencies
+```bash
+pip install -r requirements.txt
+```
+
+#### 3️⃣ Configure environment
+Create a `.env` file in the project root:
+```
+MISTRAL_API_KEY=sk-your-key
+DB_HOST=localhost
+DB_NAME=your_database
+DB_USER=your_user
+DB_PASSWORD=your_password
+```
+
+#### 4️⃣ Run the pipeline
+```bash
+python main.py
+```
+
+---
+
+## ⚡ Model Configuration
+
+The pipeline uses Mistral’s hosted model by default:
+
+```yaml
+llm:
+  model_name: "mistral-small-latest"
+  api_key: "your_api_key_here"
+  max_retries: 3
+  backoff_strategy: "exponential"
+  temperature: 0.2
+```
+
+You can edit these settings inside your `config.yaml` file.
+
+---
+
+## 🧩 Summary of Options
 
 | Setup Type | When to Use | Requirements |
 |-------------|--------------|---------------|
-| **Docker** | You want the standard setup and an isolated environment | Only Docker + Ollama |
-| **Local (GitHub)** | You want to view or modify the Python code | Python + Ollama |
+| **Docker** | Fastest setup; no Python dependencies | Docker |
+| **Local (GitHub)** | For debugging or development | Python + `.env` file with API key |
+
+---
+
+## 📊 Notes
+
+- The ETL pipeline automatically retries failed API calls using exponential backoff.
+- The hosted **Mistral API** handles all inference — no local model download is required.
+- Ensure your PostgreSQL instance is reachable from the environment you’re running in.
+- You can monitor API usage in your [La Plateforme dashboard](https://console.mistral.ai).
+
+---
+
+## 🧰 Useful Commands
+
+Rebuild and export Docker image:
+```bash
+docker build -t skill-extractor:latest .
+docker save -o skill-extractor.tar skill-extractor:latest
+```
+
+Run locally for testing:
+```bash
+python main.py --mode test
+```
+
+---
+
+## 🧪 Quick-Start: Test Your Mistral API Key
+
+Before running the full ETL, you can verify that your Mistral API key works by running this simple Python test:
+
+```python
+import os
+from openai import OpenAI
+
+client = OpenAI(api_key=os.getenv("MISTRAL_API_KEY"), base_url="https://api.mistral.ai/v1")
+
+response = client.chat.completions.create(
+    model="mistral-small-latest",
+    messages=[{"role": "user", "content": "Hello! Can you confirm my API key works?"}]
+)
+
+print(response.choices[0].message.content)
+```
+
+✅ If you see a friendly reply, your key and API setup are working correctly.
 
 ---
 
 ## 📞 Support
 
-If you encounter any issues, please make sure the Ollama server is running before executing the pipeline:
-```bash
-ollama serve &
-```
-
-For further assistance, contact: **Thibaud Vandendooren**
+For questions or issues, contact:
+**Thibaud Vandendooren**
